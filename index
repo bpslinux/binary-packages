@@ -1,0 +1,30 @@
+#!/bin/sh
+#set -ex
+>index.lst
+find * -type f -name *bps |
+	    while IFS= read file_name; do
+	    
+	    	#tar -xf ${file_name} bpsbuild
+	    	dosya="$(dirname $file_name)/bpsbuild"
+	    	version=$(cat $dosya|grep version=)
+	    	#version=$(echo $version | sed 's/.*="\([0-9]*\)\"/\1/')
+	    	#version=${version:9:-1}
+	    	
+	    	name=$(cat $dosya|grep name=)
+	    	#name=$(echo $name | sed 's/.*="\([0-9]*\)\"/\1/')
+	    	#name=${name:6:-1}
+	    	
+	    	depends=$(cat $dosya|grep depends=)
+	    	#depends=$(echo $depends | sed 's/.*="\([0-9]*\)\"/\1/')
+	    	#depends=${depends:9:-1}
+	    	
+	    	echo "$name|$version|$depends|$(dirname $file_name)">>index.lst
+		#echo $(dirname $file_name)
+		#echo $dosya
+		#echo $(basename $file_name)
+		
+	    done
+#rm -rf bpsbuild
+
+mkdir /output -p
+cp -rf index.lst /output
