@@ -3,7 +3,7 @@ name="xf86-input-elographics"
 version="1.4.3"
 description="Elographics input driver"
 source="https://gitlab.freedesktop.org/xorg/driver/xf86-input-elographics/-/archive/xf86-input-elographics-$version/xf86-input-elographics-xf86-input-elographics-$version.tar.gz"
-depends=()
+depends=""
 group="x11.drivers"
 
 setup(){

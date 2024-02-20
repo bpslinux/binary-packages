@@ -3,7 +3,7 @@ name="xf86-input-keyboard"
 version="1.9.0"
 description="Xorg keyboard input driver"
 source="https://gitlab.freedesktop.org/xorg/driver/xf86-input-keyboard/-/archive/xf86-input-keyboard-$version/xf86-input-keyboard-xf86-input-keyboard-$version.tar.gz"
-depends=()
+depends=""
 group="x11.drivers"
 
 

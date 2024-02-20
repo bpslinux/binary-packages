@@ -3,7 +3,7 @@ name="xf86-video-ati"
 version="22.0.0"
 description="ATI video driver"
 source="https://gitlab.freedesktop.org/xorg/driver/xf86-video-ati/-/archive/xf86-video-ati-$version/xf86-video-ati-xf86-video-ati-$version.tar.gz"
-depends=()
+depends=""
 group="x11.drivers"
 
 setup(){

@@ -3,7 +3,7 @@ name="xf86-video-mga"
 version="2.0.1"
 description="Matrox video driver"
 source="https://gitlab.freedesktop.org/xorg/driver/xf86-video-mga/-/archive/xf86-video-mga-$version/xf86-video-mga-xf86-video-mga-$version.tar.gz"
-depends=()
+depends=""
 group="x11.drivers"
 
 setup(){

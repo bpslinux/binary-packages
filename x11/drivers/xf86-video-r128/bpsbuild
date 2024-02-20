@@ -3,7 +3,7 @@ name="xf86-video-r128"
 version="6.12.1"
 description="ATI Rage128 video drive"
 source="https://gitlab.freedesktop.org/xorg/driver/xf86-video-r128/-/archive/xf86-video-r128-$version/xf86-video-r128-xf86-video-r128-$version.tar.gz"
-depends=()
+depends=""
 group="x11.drivers"
 
 setup(){

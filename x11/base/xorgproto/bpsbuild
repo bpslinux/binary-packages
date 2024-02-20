@@ -3,7 +3,7 @@ name="xorgproto"
 version="2023.2"
 description="X.Org combined protocol headers"
 source="https://www.x.org/releases/individual/proto/xorgproto-${version}.tar.xz"
-depends=()
+depends=""
 group="x11.base"
 
 

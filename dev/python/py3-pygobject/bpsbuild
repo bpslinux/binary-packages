@@ -4,7 +4,7 @@ version="3.43.1"
 description="Python bindings for GObject Introspection"
 source="https://gitlab.gnome.org/GNOME/pygobject/-/archive/$version/pygobject-$version.tar.gz"
 pyver=$(python -c "import sys; print(str( sys.version_info[0]) +\".\"+ str(sys.version_info[1] ))")
-depends="python"$pyver",gobject-introspection"
+depends="python'$pyver',gobject-introspection"
 group="dev.python"
 
 cd $SOURCEDIR

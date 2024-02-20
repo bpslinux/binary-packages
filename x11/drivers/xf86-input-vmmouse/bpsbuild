@@ -3,7 +3,7 @@ name="xf86-input-vmmouse"
 version="13.2.0"
 description="VMWare mouse input driver"
 source="https://gitlab.freedesktop.org/xorg/driver/xf86-input-vmmouse/-/archive/xf86-input-vmmouse-$version/xf86-input-vmmouse-xf86-input-vmmouse-$version.tar.gz"
-depends=()
+depends=""
 group="x11.drivers"
 
 setup(){

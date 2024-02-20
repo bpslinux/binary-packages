@@ -3,7 +3,7 @@ name="xf86-input-joystick"
 version="1.6.4"
 description="X.Org driver for joystick input devices"
 source="https://gitlab.freedesktop.org/xorg/driver/xf86-input-joystick/-/archive/xf86-input-joystick-$version/xf86-input-joystick-xf86-input-joystick-$version.tar.gz"
-depends=()
+depends=""
 group="x11.drivers"
 
 

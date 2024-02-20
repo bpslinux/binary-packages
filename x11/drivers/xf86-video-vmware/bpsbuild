@@ -3,7 +3,7 @@ name="xf86-video-vmware"
 version="13.4.0"
 description="VMware SVGA video driver"
 source="https://gitlab.freedesktop.org/xorg/driver/xf86-video-vmware/-/archive/xf86-video-vmware-$version/xf86-video-vmware-xf86-video-vmware-$version.tar.gz"
-depends=()
+depends=""
 group="x11.drivers"
 
 setup(){

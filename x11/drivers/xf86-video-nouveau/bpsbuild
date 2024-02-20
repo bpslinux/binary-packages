@@ -3,7 +3,7 @@ name="xf86-video-nouveau"
 version="1.0.17"
 description="Accelerated Open Source driver for nVidia cards"
 source="https://gitlab.freedesktop.org/xorg/driver/xf86-video-nouveau/-/archive/xf86-video-nouveau-$version/xf86-video-nouveau-xf86-video-nouveau-$version.tar.gz"
-depends=()
+depends=""
 group="x11.drivers"
 
 

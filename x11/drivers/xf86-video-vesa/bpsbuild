@@ -3,7 +3,7 @@ name="xf86-video-vesa"
 version="2.6.0"
 description="Generic VESA video driver"
 source="https://gitlab.freedesktop.org/xorg/driver/xf86-video-vesa/-/archive/xf86-video-vesa-$version/xf86-video-vesa-xf86-video-vesa-$version.tar.gz"
-depends=()
+depends=""
 group="x11.drivers"
 
 setup(){
