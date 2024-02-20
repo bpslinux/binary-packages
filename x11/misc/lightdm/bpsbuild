@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+name="lightdm"
+version="1.32.0"
+description="A lightweight display manager"
+source="https://salsa.debian.org/xfce-extras-team/lightdm/-/archive/debian/$version-1/lightdm-debian-$version-1.tar.gz"
+depends="libX11,pam,libxklavier,xorg-server,libxcb,glib,libgcrypt,libXdmcp,xmodmap,xrdb,libXi"
+group="x11.misc"
+
+
+setup(){
+	mkdir -p /tmp/bps/build/files
+	cp ${dizin}/${paket}/files/* /tmp/bps/build/files/
+	cd $SOURCEDIR
+   	./autogen.sh
+	../${name}-${version}/configure --prefix=/usr \
+            --sysconfdir=/etc \
+            --libdir=/usr/lib64/ \
+            --localstatedir=/var \
+            --disable-tests \
+            --disable-gtk-doc \
+            --enable-yelp-tools \
+            --enable-qt5-base \
+            --with-greeter-user=lightdm \
+            --with-greeter-session=lightdm-gtk-greeter
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+    # create user and group
+    mkdir -p $DESTDIR/etc/group.d
+    mkdir -p $DESTDIR/etc/passwd.d
+    echo "lightdm:x:108:118:Lightdm Display Manager:/var/lib/lightdm-data/:/bin/false" > $DESTDIR/etc/passwd.d/lightdm
+    echo "lightdm:x:118:" > $DESTDIR/etc/group.d/lightdm
+    # install service
+    mkdir -p $DESTDIR/etc/init.d
+    install ../files/lightdm.initd $DESTDIR/etc/init.d/lightdm
+    # generate lightdm-session file
+    echo "#!/bin/sh" > $DESTDIR/usr/bin/lightdm-session
+    echo "exec /etc/X11/xinit/Xsession $@" >> $DESTDIR/usr/bin/lightdm-session
+    # fix pam config
+    sed -i "s/systemd/elogind/g" $DESTDIR/etc/pam.d/*
+}
+

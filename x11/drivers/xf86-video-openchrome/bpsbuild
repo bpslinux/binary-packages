@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="xf86-video-openchrome"
+version="0.6.0"
+description="X.Org driver for VIA/S3G cardss"
+source="https://salsa.debian.org/xorg-team/driver/xserver-xorg-video-openchrome/-/archive/xserver-xorg-video-openchrome-1_$version-5/xserver-xorg-video-openchrome-xserver-xorg-video-openchrome-1_$version-5.tar.gz"
+depends="libXvMC"
+group="x11.drivers"
+
+setup(){
+	cd $SOURCEDIR
+	./autogen.sh
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}

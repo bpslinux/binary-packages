@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="xedit"
+version="1.2.3"
+description="Simple text editor for X"
+source="https://xorg.freedesktop.org/archive/individual/app/xedit-$version.tar.xz"
+depends="libXaw,libXmu,libXt,libX11"
+group="x11.apps"
+
+
+setup(){
+    $SOURCEDIR/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make DESTDIR="$DESTDIR" install $jobs
+}
+

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="gobject-introspection"
+version="1.78.0"
+description="Introspection system for GObject-based libraries"
+source="https://gitlab.gnome.org/GNOME/gobject-introspection/-/archive/${version}/gobject-introspection-${version}.tar.gz"
+depends=""
+group="dev.libs"
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        --wrap-mode=nodownload
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}
+

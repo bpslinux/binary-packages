@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="wayland"
+version="1.22.0"
+description="Core Wayland window system code and protocol"
+source="https://gitlab.freedesktop.org/wayland/wayland/-/archive/$version/wayland-$version.tar.gz"
+depends="zlib,expat,libffi,xz-utils,libxml2,mesa"
+group="dev.libs"
+
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64 \
+        -Ddefault_library=both \
+        -Ddocumentation=false
+}
+
+build(){
+    ninja -C $BUILDDIR 
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}
+

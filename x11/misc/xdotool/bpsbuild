@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="xdotool"
+version="3.20211022.1"
+description="Simulate keyboard/mouse input"
+source="https://github.com/jordansissel/xdotool/archive/refs/tags/v${version}.tar.gz"
+depends="libXinerama,libxkbcommon,libXtst"
+group="x11.misc"
+
+
+export PATH=$PATH:/usr/bin/core_perl
+
+setup(){
+	echo ""
+}
+
+build() {
+	cd ../xdotool-3.20211022.1
+	make #WITHOUT_RPATH_FIX=1
+}
+
+package () {
+    make install DESTDIR="$DESTDIR" PREFIX=/usr INSTALLMAN=/usr/share/man install
+}
+

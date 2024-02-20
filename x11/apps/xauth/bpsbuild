@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="xauth"
+version="1.1.2"
+description="X authority file utility"
+source="https://gitlab.freedesktop.org/xorg/app/xauth/-/archive/xauth-$version/xauth-xauth-$version.tar.gz"
+depends="libXmu,libX11"
+group="x11.apps"
+
+
+setup(){
+	cd $SOURCEDIR
+    autoreconf -fvi
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="libgnomekbd"
+version="3.28.1"
+description="Keyboard management library"
+source="https://gitlab.gnome.org/GNOME/libgnomekbd/-/archive/${version}/libgnomekbd-${version}.tar.gz"
+depends="libxklavier,gtk3,dconf"
+group="gnome.base"
+
+
+setup(){
+	cd $SOURCEDIR
+    autoreconf -fvi
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}
+

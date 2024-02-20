@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+version="1.19.3"
+name="util-macros"
+depends=""
+description="X.Org autotools utility macros"
+source="https://www.x.org/releases/individual/util/util-macros-${version}.tar.gz"
+groups="x1.wm"
+
+#cd $name-$version
+setup()
+{
+	
+	$SOURCEDIR/configure --prefix=/usr \
+		--libdir=/usr/lib64/	
+}
+build()
+{
+	make -j 4
+}
+package()
+{
+	make install DESTDIR=${DESTDIR}
+}
+
+

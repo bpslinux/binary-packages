@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="xf86-input-void"
+version="1.4.2"
+description="null input driver"
+source="https://gitlab.freedesktop.org/xorg/driver/xf86-input-void/-/archive/xf86-input-void-$version/xf86-input-void-xf86-input-void-$version.tar.gz"
+depends=()
+group="x11.drivers"
+
+setup(){
+	cd $SOURCEDIR
+	./autogen.sh
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}

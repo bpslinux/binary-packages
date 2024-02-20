@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="bdftopcf"
+version="1.1.1"
+description="X.Org bdftopcf application"
+source="https://gitlab.freedesktop.org/xorg/util/bdftopcf/-/archive/bdftopcf-$version/bdftopcf-bdftopcf-$version.tar.gz"
+depends="font-util"
+group="x11.apps"
+
+setup(){
+	cd $SOURCEDIR
+	autoreconf -fvi
+    ../${name}-${version}/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

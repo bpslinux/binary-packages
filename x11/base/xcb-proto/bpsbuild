@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+name="xcb-proto"
+version="1.16.0"
+description="X C-language Bindings protocol headers"
+source="https://xorg.freedesktop.org/archive/individual/proto/xcb-proto-${version}.tar.xz"
+depends=()
+group="x11.base"
+
+
+setup(){
+	$SOURCEDIR/configure --prefix=/usr \
+		--libdir=/usr/lib64 \
+		--with-python_prefix=/usr/lib64/python3 \
+		--with-python_exec_prefix=/usr/lib64/python3
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+    # Move files
+    mv ${DESTDIR}/usr/lib64/python3/lib/python*/site-packages/xcbgen ${DESTDIR}/usr/lib64/python3/xcbgen
+    rm -rf ${DESTDIR}/usr/lib64/python3/lib
+}

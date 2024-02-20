@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+name="xorg-server"
+version="21.1.6"
+description="X.Org X servers"
+source="https://www.x.org/releases/individual/xserver/xorg-server-$version.tar.xz"
+depends="libmd,libbsd,libepoxy,libfontenc,libxkbfile,xauth,xkbcomp,setxkbmap,freetype,libXfont2,libxcvt,mesa,libX11,libdrm,pixman,font-util,xcb-util-renderutil,xcb-util,xcb-util-image,xcb-util-wm,xcb-util-keysyms"
+group="x11.base"
+
+setup(){
+	cd $SOURCEDIR
+	meson setup $BUILDDIR --prefix=/usr \
+		--libdir=/usr/lib64/ \
+		-D ipv6=true \
+		-D xvfb=true \
+		-D xnest=true \
+		-D xcsecurity=true \
+		-D xorg=true \
+		-D xephyr=true \
+		-D glamor=true \
+		-D udev=true \
+		-D dtrace=false \
+		-D systemd_logind=false \
+		-D suid_wrapper=true \
+		-D xkb_dir=/usr/share/X11/xkb \
+		-D xkb_output_dir=/var/lib/xkb \
+		-D libunwind=false
+	}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}
+

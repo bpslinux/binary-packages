@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="xf86-video-nouveau"
+version="1.0.17"
+description="Accelerated Open Source driver for nVidia cards"
+source="https://gitlab.freedesktop.org/xorg/driver/xf86-video-nouveau/-/archive/xf86-video-nouveau-$version/xf86-video-nouveau-xf86-video-nouveau-$version.tar.gz"
+depends=()
+group="x11.drivers"
+
+
+setup(){
+	mkdir -p /tmp/bps/build/patches
+	cp ${dizin}/${paket}/patches/* /tmp/bps/build/patches/
+	cd $SOURCEDIR
+	patch -Np1 < ../patches/xorg-server-21.1.diff
+	autoreconf -fvi
+	./configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

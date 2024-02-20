@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+name="xf86-input-mtrack"
+version="0.3.1"
+description="Xorg Driver for Multitouch Trackpads"
+source="https://github.com/BlueDragonX/xf86-input-mtrack/archive/refs/tags/v$version.tar.gz"
+depends=()
+group="x11.drivers"
+
+
+setup(){
+	$SOURCEDIR/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}

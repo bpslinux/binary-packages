@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+name="libdbusmenu"
+version="16.04.0"
+description="Library to pass menu structure across DBus"
+source="https://launchpad.net/libdbusmenu/16.04/$version/+download/libdbusmenu-$version.tar.gz"
+depends="gtk3"
+group="dev.libs"
+
+export CFLAGS="$CFLAGS -Wno-error"
+
+
+setup(){
+    $SOURCEDIR/configure --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        --with-gtk=3 \
+        --disable-dumper
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="gi-docgen"
+version="2023.3"
+description=" A documentation generator for GObject-based libraries "
+source="https://gitlab.gnome.org/GNOME/gi-docgen/-/archive/$version/gi-docgen-$version.tar.gz"
+depends="py3-pygments,py3-markdown,py3-jinja,py3-typogrify"
+group="dev.util"
+
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}
+

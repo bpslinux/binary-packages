@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="shared-mime-info"
+version="2.4"
+description="The Shared MIME-info Database specification"
+source="https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/${version}/shared-mime-info-${version}.tar.gz"
+depends="libxml2"
+group="x11.misc"
+
+
+setup(){
+	mkdir -p /tmp/bps/build/files
+	cp ${dizin}/${paket}/files/* /tmp/bps/build/files/
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+    mkdir -p ${DESTDIR}/etc/sysconf.d/
+    install ../files/shared-mime-info.sysconf ${DESTDIR}/etc/sysconf.d/shared-mime-info
+}
+

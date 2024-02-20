@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="xorg-iceauth"
+version="1.0.9"
+description="ICE authority file utility"
+source="https://gitlab.freedesktop.org/xorg/app/iceauth/-/archive/iceauth-${version}/iceauth-iceauth-${version}.tar.gz"
+depends="libICE,util-macros,xorgproto"
+group="x11.apps"
+
+setup(){
+	cd $SOURCEDIR
+    autoreconf -fvi
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}

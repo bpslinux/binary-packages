@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="xf86-input-joystick"
+version="1.6.4"
+description="X.Org driver for joystick input devices"
+source="https://gitlab.freedesktop.org/xorg/driver/xf86-input-joystick/-/archive/xf86-input-joystick-$version/xf86-input-joystick-xf86-input-joystick-$version.tar.gz"
+depends=()
+group="x11.drivers"
+
+
+setup(){
+	cd $SOURCEDIR
+	./autogen.sh
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

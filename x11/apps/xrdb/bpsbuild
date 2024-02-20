@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="xrdb"
+version="1.2.1"
+description="X resource database utility"
+source="https://gitlab.freedesktop.org/xorg/app/xrdb/-/archive/xrdb-$version/xrdb-xrdb-$version.tar.gz"
+depends="libX11"
+group="x11.apps"
+
+setup(){
+	cd $SOURCEDIR
+    autoreconf -fvi
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}

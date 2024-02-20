@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+name="xorg-xset"
+version="1.2.5"
+description="User preference utility for X"
+source="https://xorg.freedesktop.org/archive/individual/app/xset-$version.tar.xz"
+depends="libXmu"
+group="x11.apps"
+
+setup(){
+    $SOURCEDIR/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make DESTDIR="$DESTDIR" install $jobs
+}

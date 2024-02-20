@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+name="xdo"
+version="0.5.7"
+description="Small X utility to perform elementary actions on windows"
+source="https://github.com/baskerville/xdo/archive/refs/tags/${version}.tar.gz"
+depends="libxcb,xcb-util-wm,xcb-util"
+group="x11.misc"
+
+setup(){
+	echo ""
+}
+
+build () {
+	cd ../xdo-0.5.7
+    make
+}
+
+package () {
+    make install PREFIX=/usr DESTDIR="$DESTDIR"
+}
+

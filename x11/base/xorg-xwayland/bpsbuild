@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+name="xorg-xwayland"
+version="23.2.1"
+description="Standalone X server running under Wayland"
+source="https://xorg.freedesktop.org/archive/individual/xserver/xwayland-$version.tar.xz"
+depends="wayland,libdrm,libepoxy,libglvnd,libXau,libxcvt,mesa,nettle,pixman"
+group="x11.base"
+
+setup () {
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        -D ipv6=true \
+        -D xvfb=true \
+        -D xdmcp=false \
+        -D xcsecurity=true \
+        -D dri3=true \
+        -D glamor=true \
+        -D xkb_dir=/usr/share/X11/xkb \
+        -D xkb_output_dir=/var/lib/xkb
+
+}
+
+build () {
+    ninja -C $BUILDDIR
+}
+
+package () {
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+    # this files provided by xorg-server
+    rm $DESTDIR/usr/lib64/xorg/protocol.txt
+    rm $DESTDIR/usr/share/man/man1/Xserver.1
+}
+

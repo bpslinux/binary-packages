@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+name="gnome-terminal"
+version="3.50.1"
+description="GNOME terminal emulator application"
+source="https://gitlab.gnome.org/GNOME/gnome-terminal/-/archive/${version}/gnome-terminal-${version}.tar.gz"
+depends="dconf,gsettings-desktop-schemas,itstool,libpcre2,vte3"
+group="x11.terms"
+
+
+setup () {
+	mkdir -p /tmp/bps/build/patches
+	cp ${dizin}/${paket}/patches/* /tmp/bps/build/patches/
+
+	cd $SOURCEDIR
+	patch -Np1 < ../patches/00-ignore-language-check.patch
+    meson setup $BUILDDIR --prefix=/usr \
+		--libdir=/usr/lib64/ \
+		-Ddefault_library=both \
+		-Dnautilus_extension=false \
+		-Dsearch_provider=false
+}
+
+build () {
+    ninja -C $BUILDDIR
+}
+
+package () {
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}
+

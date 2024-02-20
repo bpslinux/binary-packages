@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="xorgproto"
+version="2023.2"
+description="X.Org combined protocol headers"
+source="https://www.x.org/releases/individual/proto/xorgproto-${version}.tar.xz"
+depends=()
+group="x11.base"
+
+
+setup(){
+	$SOURCEDIR/configure --prefix=/usr \
+        --libdir=/usr/lib64 \
+		--without-xmlto \
+		--without-xsltproc
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}

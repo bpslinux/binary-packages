@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+name="meson"
+version="1.3.0"
+description="High productivity build system"
+source="https://github.com/mesonbuild/meson/releases/download/$version/meson-$version.tar.gz"
+depends="python,py3-setuptools"
+group="dev.util"
+
+	cd $SOURCEDIR
+setup(){
+	echo ""
+}
+
+build(){
+	cd ../meson-1.3.0
+    python3 setup.py $BUILDDIR
+}
+
+package(){
+    python3 setup.py install --root="${DESTDIR}" --install-lib=/usr/lib64/python3 --optimize=1 --skip-build
+
+    # move to version independent
+    mkdir -p "${DESTDIR}/usr/lib64/python3"
+    mv ${DESTDIR}/usr/lib/python*/site-packages/* "${DESTDIR}/usr/lib64/python3"
+    rm -rf "${DESTDIR}/usr/lib"
+    install -d "${DESTDIR}/usr/share/vim/vimfiles"
+    cp -rt "${DESTDIR}/usr/share/vim/vimfiles" data/syntax-highlighting/vim/*/
+
+    install -Dt "${DESTDIR}/usr/share/bash-completion/completions" -m644 data/shell-completions/bash/*
+    install -Dt "${DESTDIR}/usr/share/zsh/site-functions" -m644 data/shell-completions/zsh/*
+    # fix hardcoded interpreter location
+    sed -i "1s|.*|#!/usr/bin/python3|g" "${DESTDIR}/usr/bin/meson"
+}
+
