@@ -3,7 +3,7 @@ name="libnotify"
 version="0.8.2"
 description="Library for sending desktop notifications"
 source="https://download.gnome.org/sources/libnotify/${version%.*}/libnotify-${version}.tar.xz"
-depends=()
+depends=""
 group="x11.libs"
 
 setup(){

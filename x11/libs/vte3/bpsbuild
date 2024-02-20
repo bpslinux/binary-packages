@@ -3,13 +3,8 @@ name="vte3"
 version="0.74.0"
 description="vte Library providing a virtual terminal emulator widget"
 source="https://gitlab.gnome.org/GNOME/vte/-/archive/${version}/vte-${version}.tar.gz"
-depends="libxkbcommon,libxcb,wayland,libthai,pixman,libpng,pixman,libpcre2,pango,p11-kit,nettle,util-linux,libjpeg-turbo,
-libidn2,icu,harfbuzz,gtk3,glib,gnutls,gmp,gdk-pixbuf,fribidi,fontconfig,expat,libepoxy,dbus,libdatrie,libcloudproviders,
-cairo,bzip2,at-spi2-core,libXfixes,libXi,libXrandr,libXrender,libXext,libXdmcp,libXdamage,libXcursor,libXcomposite,
-libXau,libX11,libxkbcommon"
+depends="libxkbcommon,libxcb,wayland,libthai,pixman,libpng,pixman,libpcre2,pango,p11-kit,nettle,util-linux,libjpeg-turbo,libidn2,icu,harfbuzz,gtk3,glib,gnutls,gmp,gdk-pixbuf,fribidi,fontconfig,expat,libepoxy,dbus,libdatrie,libcloudproviders,cairo,bzip2,at-spi2-core,libXfixes,libXi,libXrandr,libXrender,libXext,libXdmcp,libXdamage,libXcursor,libXcomposite,libXau,libX11,libxkbcommon"
 group="x11.libs"
-
-#cd vte-$version
 
 setup(){
 cd $SOURCEDIR

@@ -3,7 +3,7 @@ name="tslib"
 version="1.22"
 description="Touchscreen Access Library"
 source="https://github.com/libts/tslib/releases/download/${version}/tslib-${version}.tar.xz"
-depends=()
+depends=""
 group="x11.libs"
 
 

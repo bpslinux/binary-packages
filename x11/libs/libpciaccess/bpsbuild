@@ -3,7 +3,7 @@ name="libpciaccess"
 version="0.17"
 description="Library providing generic access to the PCI bus and devices"
 source="https://www.x.org/archive/individual/lib/libpciaccess-$version.tar.xz"
-depends=()
+depends=""
 group="x11.libs"
 
 

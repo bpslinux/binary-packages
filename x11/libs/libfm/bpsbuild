@@ -3,9 +3,7 @@ name="libfm"
 version="1.3.2"
 description="Library for file management"
 source="https://github.com/lxde/libfm/archive/refs/tags/${version}.tar.gz"
-
 depends="gtk3,pango,intltool,menu-cache"
-
 group="x11.libs"
 
 

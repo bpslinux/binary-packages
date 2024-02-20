@@ -3,7 +3,7 @@ name="libXxf86vm"
 version="1.1.5"
 description="X.Org Xxf86vm library"
 source="https://www.x.org/archive/individual/lib/libXxf86vm-$version.tar.xz"
-depends=()
+depends=""
 group="x11.libs"
 
 

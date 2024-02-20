@@ -3,7 +3,7 @@ name="hsakmt"
 version="1.0.0"
 description="Package hsakt"
 source="https://www.x.org/archive/individual/lib/hsakmt-$version.tar.gz"
-depends=()
+depends=""
 group="x11.libs"
 
 

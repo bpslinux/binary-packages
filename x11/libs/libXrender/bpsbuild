@@ -3,7 +3,7 @@ name="libXrender"
 version="0.9.11"
 description="X.Org Xrender library"
 source="https://www.x.org/archive/individual/lib/libXrender-$version.tar.xz"
-depends=()
+depends=""
 group="x11.libs"
 
 
