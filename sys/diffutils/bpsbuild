@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="diffutils"
+version="3.10"
+description="Utility programs used for creating patch files"
+source="https://ftp.gnu.org/gnu/diffutils/diffutils-$version.tar.xz"
+depends="bash"
+group="sys.apps"
+
+
+setup(){
+    $SOURCEDIR/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+
