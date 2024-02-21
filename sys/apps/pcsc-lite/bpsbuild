@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="pcsc-lite"
+version="1.9.9"
+description="Middleware to access a smart card using SCard API (PC/SC)"
+source="https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2"
+depends="elogind,eudev"
+group="sys.apps"
+
+
+
+setup(){
+export PATH=$PATH:/usr/bin/core_perl
+    $SOURCEDIR/configure --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        --disable-libsystemd
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

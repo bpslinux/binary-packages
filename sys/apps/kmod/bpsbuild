@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+name="kmod"
+version="31"
+description="library and tools for managing linux kernel modules"
+source=("https://mirrors.edge.kernel.org/pub/linux/utils/kernel/kmod/kmod-$version.tar.xz")
+depends=(zlib xz-utils)
+group=(sys.apps)
+
+export PATH=$HOME:$PATH
+
+
+setup(){
+    touch libkmod/docs/gtk-doc.make
+    $SOURCEDIR/configure --prefix=/usr \
+        --libdir=/lib64/ \
+        --bindir=/sbin
+   # remove xsltproc dependency
+   rm -f man/Makefile
+   echo -e "all:\ninstall:" > man/Makefile
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+    mkdir -p ${DESTDIR}/sbin
+    for tool in {ins,ls,rm,dep}mod mod{probe,info}; do
+        ln -s kmod "${DESTDIR}/sbin/$tool"
+  done
+}
+

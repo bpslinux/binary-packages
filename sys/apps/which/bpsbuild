@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+name="which"
+version="2.21"
+description="Prints out location of specified executables that are in your path"
+source="https://carlowood.github.io/which/which-$version.tar.gz"
+depends=""
+group="sys.apps"
+
+setup(){
+    $SOURCEDIR/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

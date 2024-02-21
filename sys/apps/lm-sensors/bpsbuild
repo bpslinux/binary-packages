@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="lm-sensors"
+version="3.6.0"
+description="Collection of user space tools for general SMBus access and hardware monitoring."
+_commit="31d1f125d8076f1c8c8f3224b31d240e6e6a1763"
+source="https://github.com/lm-sensors/lm-sensors/archive/${_commit}.zip"
+depends="sysfsutils"
+group="sys.apps"
+
+setup(){
+	export CFLAGS="$CFLAGS -fno-stack-protector"
+}
+
+build () {
+	cd $SOURCEDIR
+    make PREFIX=/usr
+}
+
+package () {
+    make PREFIX=/usr DESTDIR="$DESTDIR" install 
+
+}

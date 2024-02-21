@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+name="gptfdisk"
+version="1.0.9"
+description="GPT partition table manipulator for Linux"
+source="https://salsa.debian.org/debian/gdisk/-/archive/debian/$version-2.1/gdisk-debian-$version-2.1.tar.gz"
+depends="popt"
+group="sys.apps"
+
+
+# tinfo is not symlink of ncurses for turkman
+export LDFLAGS="$LDFLAGS -ltinfo"
+
+setup(){
+	mkdir -p /tmp/bps/build/patches
+	cp ${dizin}/${paket}/patches/* /tmp/bps/build/patches/
+	cd $SOURCEDIR
+	patch -Np1 < ../patches/gptfdisk-1.0.9-convenience-1.patch
+    sed -i "s|ncursesw/||" gptcurses.cc &&
+    sed -i "s|sbin|usr/sbin|" Makefile &&
+    sed -i "/UUID_H/s/^.*$/#if defined (_UUID_UUID_H) || defined (_UL_LIBUUID_UUID_H)/" guid.cc &&
+    sed -i "/device =/s/= \(.*\);/= strdup(\1);/" gptcl.cc
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

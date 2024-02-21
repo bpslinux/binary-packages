@@ -1,0 +1,22 @@
+#!/bin/sh
+if [ ! -f /var/lib/ymp/sysconf/shadow/postinstall.done ] ; then
+    touch /etc/group
+    date > /var/lib/ymp/sysconf/shadow/postinstall.done
+fi
+if [ ! -f /etc/shadow ] ; then
+    echo "root:*::0:::::" > /etc/shadow
+    chmod 600 /etc/shadow
+    chown root /etc/shadow
+    chgrp root /etc/shadow
+fi
+current=$(date +%s -r /etc/pam.d/system-auth.d/)
+last=$(cat /var/lib/ymp/sysconf/shadow/update.date 2>/dev/null)
+if [ "$current" != "$last" ] ; then
+    echo "# Automatically generated file. Do not edit."> /etc/pam.d/system-auth
+    for file in $(ls /etc/pam.d/system-auth.d/ | sort) ; do
+       echo "### CONFIG: $file" 
+       cat /etc/pam.d/system-auth.d/$file | sed "s/#.*//g"
+       echo
+    done | sed "/^ *$/d" >> /etc/pam.d/system-auth
+    date +%s -r /etc/pam.d/system-auth.d/ > /var/lib/ymp/sysconf/shadow/update.date
+fi

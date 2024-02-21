@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="less"
+version="643"
+description="Excellent text file viewer"
+source="https://ftp.gnu.org/gnu/less/less-$version.tar.gz"
+depends="ncurses,libpcre2"
+group="sys.apps"
+
+
+setup(){
+    $SOURCEDIR/configure --prefix=/usr \
+        --sysconfdir=/etc \
+        --with-regex=pcre2
+}
+
+build(){
+    make
+}
+
+package(){
+    make DESTDIR=${DESTDIR} install
+}
+

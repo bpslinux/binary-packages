@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="procps-ng"
+version="4.0.4"
+description="/proc file system utilities"
+source="https://sourceforge.net/projects/procps-ng/files/Production/procps-ng-$version.tar.xz"
+depends="ncurses,elogind"
+group="sys.apps"
+
+setup () {
+  sed "s:<ncursesw/:<:g" -i src/watch.c
+    $SOURCEDIR/configure --prefix=/usr \
+    --without-systemd \
+    --disable-static \
+    --disable-kill
+}
+
+build () {
+    make
+}
+
+package () {
+    make install DESTDIR=$DESTDIR
+}
+
