@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="libunwind"
+version="1.7.0"
+description="Portable and efficient API to determine the call-chain of a program"
+source="https://github.com/libunwind/libunwind/archive/refs/tags/v$version-rc2.tar.gz"
+depends=""
+group="sys.libs"
+
+setup(){
+	cd $SOURCEDIR
+	autoreconf -fvi
+  ./configure --prefix=/usr \
+      --libdir=/usr/lib64/
+
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}

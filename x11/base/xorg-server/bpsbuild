@@ -3,7 +3,7 @@ name="xorg-server"
 version="21.1.6"
 description="X.Org X servers"
 source="https://www.x.org/releases/individual/xserver/xorg-server-$version.tar.xz"
-depends="libmd,libbsd,libepoxy,libfontenc,libxkbfile,xauth,xkbcomp,setxkbmap,freetype,libXfont2,libxcvt,mesa,libX11,libdrm,pixman,font-util,xcb-util-renderutil,xcb-util,xcb-util-image,xcb-util-wm,xcb-util-keysyms"
+depends="libmd,libbsd,libepoxy,libglvnd,libunwind,libfontenc,libxkbfile,xauth,xkbcomp,setxkbmap,freetype,libXfont2,libxcvt,mesa,libX11,libdrm,pixman,font-util,xcb-util-renderutil,xcb-util,xcb-util-image,xcb-util-wm,xcb-util-keysyms"
 group="x11.base"
 
 setup(){
@@ -22,8 +22,7 @@ setup(){
 		-D systemd_logind=false \
 		-D suid_wrapper=true \
 		-D xkb_dir=/usr/share/X11/xkb \
-		-D xkb_output_dir=/var/lib/xkb \
-		-D libunwind=false
+		-D xkb_output_dir=/var/lib/xkb
 	}
 
 build(){

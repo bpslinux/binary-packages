@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="seatd"
+version="0.8.0"
+description="Minimal seat management daemon and universal library"
+source="https://github.com/kennylevinsen/seatd/archive/refs/tags/$version.tar.gz"
+depends=""	
+group="sys.auth"
+
+setup(){
+	cp ${dizin}/${paket}/seatd.initd /tmp/bps/build/seatd.initd
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+    install -m755 -D ../seatd.initd "$DESTDIR"/etc/init.d/seatd
+}
+

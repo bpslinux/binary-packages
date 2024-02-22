@@ -1,0 +1,9 @@
+#!/bin/bash
+if [ ! -f /var/lib/ymp/sysconf/polkit/postinstall.done ] ; then
+    install -d /usr/share/polkit-1/rules.d
+    install -d /etc/polkit-1/rules.d
+    chown -R polkitd:polkitd /{etc,usr/share}/polkit-1/rules.d
+    chmod -R 700 /etc/polkit-1/rules.d
+    chmod -R 700 /usr/share/polkit-1/rules.d
+    date > /var/lib/ymp/sysconf/polkit/postinstall.done
+fi
