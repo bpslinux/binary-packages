@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="libclc"
+version="16.0.6"
+description="Open source implementation of the library requirements of the OpenCL C programming language"
+source="https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/libclc-$version.src.tar.xz"
+depends="spirv-llvm-translator"
+group="dev.libs"
+
+setup(){
+	cd $SOURCEDIR
+
+    cmake -B $BUILDDIR -G Ninja \
+        -DCMAKE_INSTALL_PREFIX=/usr
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}

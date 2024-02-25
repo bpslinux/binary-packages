@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="libva"
+version="2.20.0"
+description="An implementation for VA-API (Video Acceleration API)"
+source="https://github.com/intel/libva/archive/$version.tar.gz"
+depends="libdrm,libX11,libXext,libXfixes,wayland"
+group="media.libs"
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        -Ddefault_library=both
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+    #mkdir -p ${DESTDIR}/etc/
+    echo "LIBVA_MESSAGING_LEVEL=1" > ${DESTDIR}/etc/libva.conf
+}
+

@@ -1,7 +1,7 @@
 #!/bin/sh
 #set -ex
 >index.lst
-find * -type f -name *bps |
+find * -type f -name *.bps |
 	    while IFS= read file_name; do
 	    
 	    	#tar -xf ${file_name} bpsbuild
@@ -24,7 +24,6 @@ find * -type f -name *bps |
 		#echo $(basename $file_name)
 		
 	    done
-#rm -rf bpsbuild
 
 mkdir /output -p
 cp -rf index.lst /output
