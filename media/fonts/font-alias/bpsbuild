@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="font-alias"
+version="1.0.4"
+description="X.Org font aliases "
+source="https://gitlab.freedesktop.org/xorg/font/alias/-/archive/font-alias-$version/alias-font-alias-$version.tar.gz"
+depends="font-util"
+group="media.fonts"
+
+setup(){
+	cd $SOURCEDIR
+	autoreconf -fvi
+	cd $BUILDDIR
+    ../${name}-${version}/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

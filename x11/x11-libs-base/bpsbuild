@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+name="x11-libs-base"
+version="1.0.0"
+description="X.Org font aliases "
+source=""
+depends="cairo,gdk-pixbuf,gtksourceview4,hsakmt,libdatrie,libdmx,libdrm,libfm,libfontenc,libFS,libICE,libnotify,libpciaccess,libSM,libthai,libvdpau,libwnck3,libX11,libXau,libXaw,libXaw3d,libxcb,libXcomposite,libXcursor,libxcvt,libXdamage,libXdmcp,libXext,libXfixes,libXfont,libXfont2,libXft,libXi,libXinerama,libxkbcommon,libxkbfile,libxkbui,libxklavier,libXmu,libXpm,libXpresent,libXrandr,libXrender,libXres,libxshmfence,libxss,libXt,libXtst,libXv,libXvMC,libXxf86dga,libXxf86vm,pango,pixman,startup-notification,tslib,vte3,xapp,xcb-util,xcb-util-cursor,xcb-util-errors,xcb-util-image,xcb-util-keysyms,xcb-util-renderutil,xcb-util-wm,xtrans"
+group="media.fonts"
+
+setup(){
+	echo ""
+}
+
+build(){
+   echo ""
+}
+
+package(){
+touch $DESTDIR/x11-libs-base
+ 
+}
+

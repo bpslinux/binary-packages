@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="font-bh-lucidatypewriter-75dpi"
+version="1.0.3"
+description="X.Org Bigelow & Holmes Lucida bitmap fonts "
+source="https://gitlab.freedesktop.org/xorg/font/bh-lucidatypewriter-75dpi/-/archive/font-bh-lucidatypewriter-75dpi-$version/bh-lucidatypewriter-75dpi-font-bh-lucidatypewriter-75dpi-$version.tar.gz"
+depends="font-util"
+group="media.fonts"
+
+
+setup(){
+	cd $SOURCEDIR
+	autoreconf -fvi
+	cd $BUILDDIR
+    ../${name}-${version}/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

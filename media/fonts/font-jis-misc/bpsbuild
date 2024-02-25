@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="font-jis-misc"
+version="1.0.3"
+description="X.Org JIS (japanese) fonts "
+source="https://gitlab.freedesktop.org/xorg/font/jis-misc/-/archive/font-jis-misc-$version/jis-misc-font-jis-misc-$version.tar.gz"
+depends="bdftopcf,font-util"
+group="media.fonts"
+
+setup(){
+	cd $SOURCEDIR
+	autoreconf -fvi
+	cd $BUILDDIR
+    ../${name}-${version}/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

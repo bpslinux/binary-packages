@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+name="x11-base-base"
+version="1.0.0"
+description="X.Org font aliases "
+source=""
+depends="xcb-proto,xorgproto,xorg-server,xorg-xwayland"
+group="x11"
+
+setup(){
+	echo ""
+}
+
+build(){
+   echo ""
+}
+
+package(){
+touch $DESTDIR/x11-base-base
+ 
+}
+

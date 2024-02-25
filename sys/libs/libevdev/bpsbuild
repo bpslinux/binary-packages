@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+name="libevdev"
+version="1.13.0"
+description="Wrapper library for evdev devices"
+source="https://gitlab.freedesktop.org/libevdev/libevdev/-/archive/libevdev-$version/libevdev-libevdev-$version.tar.gz"
+depends=""
+group="sys.libs"
+
+cd $name-$name-$version
+
+setup(){
+
+    cd $SOURCEDIR
+    autoreconf -fvi
+    ../${name}-${version}/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

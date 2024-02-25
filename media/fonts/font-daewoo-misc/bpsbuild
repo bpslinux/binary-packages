@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="font-daewoo-misc"
+version="1.0.3"
+description="X.Org Daewoo fonts "
+source="https://gitlab.freedesktop.org/xorg/font/daewoo-misc/-/archive/font-daewoo-misc-$version/daewoo-misc-font-daewoo-misc-$version.tar.gz"
+depends="bdftopcf,font-util"
+group="media.fonts"
+
+
+setup(){
+	cd $SOURCEDIR
+	autoreconf -fvi
+	cd $BUILDDIR
+    ../${name}-${version}/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

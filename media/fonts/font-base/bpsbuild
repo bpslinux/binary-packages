@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+name="font-base"
+version="1.0.0"
+description="X.Org font aliases "
+source=""
+depends="cantarell-fonts,dejavu,encodings,font-adobe-utopia-type1,font-alias,font-bh-100dpi,font-bh-75dpi,font-bh-lucidatypewriter-100dpi,font-bh-lucidatypewriter-75dpi,font-bh-ttf,font-bh-type1,font-bitstream-type1,font-cronyx-cyrillic,font-cursor-misc,font-daewoo-misc,font-dec-misc,font-ibm-type1,font-isas-misc,font-jis-misc,font-util,font-xfree86-type1"
+group="media.fonts"
+
+setup(){
+	echo ""
+}
+
+build(){
+   echo ""
+}
+
+package(){
+touch $DESTDIR/font-base
+ 
+}
+

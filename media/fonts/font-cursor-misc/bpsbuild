@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="font-cursor-misc"
+version="1.0.3"
+description="X.Org cursor font "
+source="https://gitlab.freedesktop.org/xorg/font/cursor-misc/-/archive/font-cursor-misc-$version/cursor-misc-font-cursor-misc-$version.tar.gz"
+depends="font-util"
+group="media.fonts"
+
+setup(){
+	cd $SOURCEDIR
+	autoreconf -fvi
+	cd $BUILDDIR
+    ../${name}-${version}/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

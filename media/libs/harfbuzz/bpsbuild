@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="harfbuzz"
+version="8.3.0"
+description="HarfBuzz text shaping engine"
+source="https://github.com/harfbuzz/harfbuzz/archive/refs/tags/$version.tar.gz"
+depends="cairo,glib"
+group="media.libs"
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        -Ddocs=disabled \
+        -Dgobject=enabled \
+        -Dfreetype=enabled
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}
+

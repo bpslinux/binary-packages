@@ -3,7 +3,7 @@ name="xcb-proto"
 version="1.16.0"
 description="X C-language Bindings protocol headers"
 source="https://xorg.freedesktop.org/archive/individual/proto/xcb-proto-${version}.tar.xz"
-depends=""
+depends=()
 group="x11.base"
 
 

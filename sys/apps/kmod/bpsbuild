@@ -2,8 +2,8 @@
 name="kmod"
 version="31"
 description="library and tools for managing linux kernel modules"
-source=("https://mirrors.edge.kernel.org/pub/linux/utils/kernel/kmod/kmod-$version.tar.xz")
-depends=(zlib xz-utils)
+source="https://mirrors.edge.kernel.org/pub/linux/utils/kernel/kmod/kmod-$version.tar.xz"
+depends="zlib xz-utils"
 group=(sys.apps)
 
 export PATH=$HOME:$PATH

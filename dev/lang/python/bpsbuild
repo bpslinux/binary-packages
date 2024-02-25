@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+name="python"
+version="3.11.1"
+description="Python meta package"
+source="https://www.python.org/ftp/python/${version}/Python-${version}.tar.xz"
+depends=""
+group="dev.lang"
+
+setup(){
+	cd $SOURCEDIR
+	CXX="/usr/bin/g++" \
+	./configure --prefix=/usr \
+		--enable-ipv6 \
+		--enable-loadable-sqlite-extensions \
+		--enable-optimizations \
+		--enable-shared \
+		--with-lto \
+		--with-computed-gotos \
+		--with-dbmliborder=gdbm:ndbm \
+		--with-system-expat \
+		--with-system-ffi \
+		--with-system-libmpdec \
+		--without-ensurepip
+}
+
+build(){
+	make
+}
+
+package(){
+    make DESTDIR="${DESTDIR}" install
+}
+

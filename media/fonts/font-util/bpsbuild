@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="font-util"
+version="1.3.3"
+description="X.Org font utilities"
+source="https://gitlab.freedesktop.org/xorg/font/util/-/archive/font-util-$version/util-font-util-$version.tar.gz"
+depends=""
+group="media.fonts"
+
+setup(){
+	cd $SOURCEDIR
+	autoreconf -fvi
+	cd $BUILDDIR
+    ../${name}-${version}/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

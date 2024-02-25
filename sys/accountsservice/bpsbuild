@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+name="accountsservice"
+version="23.13.9"
+description="D-Bus interface for user account query and manipulation"
+source="https://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz"
+depends="elogind,glib,polkit"
+group="sys.apps"
+
+setup () {
+	cd $SOURCEDIR
+	
+	mv tests/dbusmock{,-tests}
+	sed -e '/accounts_service\.py/s/dbusmock/dbusmock-tests/' -i tests/test-libaccountsservice.py
+	sed -i '/^SIMULATED_SYSTEM_LOCALE/s/en_IE.UTF-8/en_HK.iso88591/' tests/test-daemon.py
+
+    meson setup $BUILDDIR \
+		--prefix=/usr \
+		-Db_lto=true \
+		-Dsystemdsystemunitdir=no \
+		-Delogind=true \
+		-Dintrospection=true \
+		-Dlightdmconffile=/etc/lightdm/lightdm.conf \
+		-Ddocbook=false \
+		-Dgtk_doc=false \
+		-Dadmin_group=wheel \
+		-Dvapi=true
+}
+
+build () {
+	cd $BUILDDIR
+    ninja -C $BUILDDIR
+}
+
+package () {
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}
+

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="font-isas-misc"
+version="1.0.3"
+description=" X.Org the Institute of Software, Academia Sinica (chinese) fonts "
+source="https://gitlab.freedesktop.org/xorg/font/isas-misc/-/archive/font-isas-misc-$version/isas-misc-font-isas-misc-$version.tar.gz"
+depends="bdftopcf,font-util"
+group="media.fonts"
+
+setup(){
+	cd $SOURCEDIR
+	autoreconf -fvi
+	cd $BUILDDIR
+    ../${name}-${version}/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

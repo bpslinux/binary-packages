@@ -15,15 +15,17 @@ setup(){
     meson setup $BUILDDIR \
         --sysconfdir=/etc \
         --prefix=/ \
+        --libdir=/lib \
         -Ddefault_library=both \
         -Dzsh-completions=true \
         -Dbash-completions=true \
         -Dpam=true \
         -Dpkgconfig=true
+#                -Dpam=true \
 }
 
 build(){
-    ninja -C build
+    ninja -C $BUILDDIR
 }
 
 package(){
