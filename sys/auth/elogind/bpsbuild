@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 name="elogind"
 version="252.9"
-description="he systemd projects logind, extracted to a standalone package"
+description="Elogind is the systemd projects logind, extracted to a standalone package"
 source="https://github.com/elogind/elogind/archive/refs/tags/v$version.tar.gz"
 depends="acl,attr,audit,libcap-ng,libcap,dbus,pam"
 group="sys.auth"
@@ -21,8 +21,11 @@ setup(){
         -Dreboot-path=/sbin/reboot \
         -Dpoweroff-path=/sbin/poweroff \
         -Drootlibexecdir=/usr/libexec/elogind \
+        -Ddefault-hierarchy=hybrid \
         -Ddefault-kill-user-processes=true \
         -Dpam=true \
+        -Dpamconfdir=/etc/pam.d \
+		-Dpamlibdir=/lib/security \
         -Dselinux=false \
         -Daudit=true \
         -Defi=false \
@@ -61,5 +64,6 @@ package(){
     # ld.so.conf
     mkdir -p "${DESTDIR}"/etc/ld.so.conf.d/
     echo "/lib64/elogind" > "${DESTDIR}"/etc/ld.so.conf.d/elogind.conf
+
 }
 
