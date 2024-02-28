@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="2.38"
+version="2.39"
 name="glibc"
 depends=""
 description="temel kütüphane"
@@ -8,7 +8,7 @@ source="https://ftp.gnu.org/gnu/libc/${name}-${version}.tar.gz"
 groups="sys.base"
 setup()
 {
-	../${name}-${version}/configure --prefix=/ --disable-werror
+	../${name}-${version}/configure --prefix=/usr --disable-werror
 }
 build()
 {
