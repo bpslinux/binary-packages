@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+name="py3-babel"
+version="2.12.1"
+description="Python3 i18n tool"
+source="https://github.com/python-babel/babel/archive/refs/tags/v${version}.tar.gz"
+depends="python"
+builddepend=""
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+

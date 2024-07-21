@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+name="onlyoffice"
+version="8.1.0.162"
+description="A free and open source office and productivity suite"
+source="https://github.com/ONLYOFFICE/build_tools/archive/refs/tags/v$version.tar.gz"
+depends="desktop-file-utils,hicolor-icon-theme,tar"
+builddepend="intltool,libxslt,gtk3"
+group="app.arch"
+
+
+setup(){
+    cd $SOURCEDIR/tools/linux
+      
+}
+build(){
+    echo ""
+}
+
+package(){
+    ./automate.py 
+}

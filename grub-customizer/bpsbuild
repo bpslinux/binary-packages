@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+name="grub-customizer"
+version="5.2.5"
+description="A graphical grub2 settings manager"
+source="https://launchpad.net/$name/${version%.*}/$version/+download/${name}_$version.tar.gz"
+depends="grub,hicolor-icon-theme,openssl"
+builddepend="atkmm,cairomm,cmake,glibmm,gtk3,gtkmm3,libarchive,libsigc++,pangomm"
+groups="sys.boot"
+
+setup(){
+	cp -prvf $PACKAGEDIR/grub.cfg /tmp/bps/build/
+	cd $SOURCEDIR
+    cmake -B $BUILDDIR -G Ninja \
+		-DCMAKE_BUILD_TYPE=none \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=/usr/lib64 \
+		-Wno-dev
+}
+
+build(){
+    cmake --build $BUILDDIR
+}
+
+package(){
+	DESTDIR=$DESTDIR cmake --install $BUILDDIR
+	install -vDm 644 ../grub.cfg -t "$DESTDIR/etc/$name/"
+}
+
+
+

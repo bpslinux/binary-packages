@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+name="libxfce4util"
+version="4.18.2"
+description="Basic utility non-GUI functions for Xfce"
+source="https://archive.xfce.org/src/xfce/libxfce4util/${version%.*}/libxfce4util-${version}.tar.bz2"
+depends=""
+builddepend="intltool,gobject-introspection,vala"
+group="xfce.base"
+
+setup () {
+	cd $SOURCEDIR
+    ./configure --prefix=/usr \
+		--libdir=/usr/lib64/ \
+		--sysconfdir=/etc \
+		--sbindir=/usr/bin \
+		--localstatedir=/var \
+		--disable-debug
+
+}
+
+build(){
+    make
+}
+
+package(){
+    make DESTDIR=$DESTDIR install
+}
+

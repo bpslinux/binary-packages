@@ -1,0 +1,9 @@
+#!/bin/sh
+if [ ! -f /var/lib/ymp/sysconf/eudev/postinst.done ] ; then
+    udevadm hwdb --update
+    date > /var/lib/ymp/sysconf/eudev/postinst.done
+fi
+if [ -S /run/udev/control ]; then
+	udevadm control --reload
+fi
+

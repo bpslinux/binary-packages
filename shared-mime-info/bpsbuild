@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+name="shared-mime-info"
+version="2.4"
+description="The Shared MIME-info Database specification"
+source="https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/${version}/shared-mime-info-${version}.tar.gz"
+depends="libxml2"
+group="x11.misc"
+
+
+setup(){	
+	cd /tmp/bps/build
+	wget https://anduin.linuxfromscratch.org/BLFS/xdgmime/xdgmime.tar.xz
+	tar -xf xdgmime.tar.xz
+    
+    #cd xdgmime
+    CFLAGS= make -C xdgmime
+    
+    cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        --buildtype=release \
+        -Dupdate-mimedb=true
+
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install   
+}
+

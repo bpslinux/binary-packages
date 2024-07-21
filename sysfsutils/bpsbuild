@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="sysfsutils"
+version="2.1.1"
+description="System Utilities Based on Sysfs"
+source="https://github.com/linux-ras/sysfsutils/archive/v${version}.tar.gz"
+depends=""
+builddepend="autoconf,automake,libtool"
+group="sys.fs"
+
+
+setup(){
+	cd $SOURCEDIR
+	autoreconf -fvi
+    ./configure --prefix=/usr
+}
+
+build(){
+    make
+}
+
+package(){
+    make DESTDIR="$DESTDIR" install
+}
+

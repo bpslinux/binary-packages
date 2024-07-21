@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+name="libpsl"
+version="0.21.5"
+description="C library for the Public Suffix List"
+source="https://github.com/rockdaboot/libpsl/releases/download/$version/libpsl-$version.tar.gz"
+depends="libidn2"
+builddepend="libunistring"
+group="net.libs"
+
+
+setup(){
+	cd $SOURCEDIR
+    
+    meson setup $BUILDDIR --prefix=/usr \
+        --default-library=both \
+        --libdir=/usr/lib64 \
+        -Druntime=libidn2 \
+	  	-Dbuiltin=true
+}
+
+build(){
+    ninja -C build
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}
+

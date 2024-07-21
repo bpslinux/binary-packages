@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="highway"
+version="1.1.0"
+description="Performance-portable, length-agnostic SIMD with runtime dispatch"
+source="https://github.com/google/highway/archive/refs/tags/$version.tar.gz"
+depends=""
+group="sys.apps"
+
+setup(){
+	cd $SOURCEDIR
+    cmake -B build -G 'Unix Makefiles'\
+        -DCMAKE_INSTALL_PREFIX:PATH=/usr \
+        -DBUILD_TESTING:BOOL='OFF' \
+        -DBUILD_SHARED_LIBS:BOOL='ON' \
+        -DHWY_SYSTEM_GTEST:BOOL='OFF'
+}
+
+build(){
+    cmake --build build
+}
+
+package(){
+    DESTDIR=$DESTDIR cmake --install build
+}
+

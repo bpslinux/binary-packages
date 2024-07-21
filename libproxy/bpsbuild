@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="libproxy"
+version="0.5.3"
+description="Automatic proxy configuration management library"
+source="https://github.com/libproxy/libproxy/archive/refs/tags/${version}.tar.gz"
+depends="curl,duktape,glib"
+builddepend=""
+group="net.libs"
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        -Dvapi=false
+}
+
+build(){
+    meson compile -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+}

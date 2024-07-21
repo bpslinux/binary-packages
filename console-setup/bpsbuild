@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+name="console-setup"
+version="1.226"
+description="Keytable files and keyboard utilities"
+source="https://salsa.debian.org/installer-team/console-setup/-/archive/1.226/console-setup-1.226.tar.gz"
+depends="autoconf,automake,linux-headers"
+group="sys.apps"
+
+
+setup(){
+	
+	
+    cd $SOURCEDIR
+    
+}
+
+build(){
+
+     make install-linux
+}
+
+package(){
+mkdir ${DESTDIR}/usr
+mkdir ${DESTDIR}/bin
+    make  prefix=${DESTDIR} install-linux 
+     #make prefix=/tmp/cs install-linux 
+    
+}
+

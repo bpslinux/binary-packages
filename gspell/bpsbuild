@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="gspell"
+version="1.12.2"
+description="Flexible API to add spell checking to a GTK+ application"
+source="https://download.gnome.org/sources/gspell/${version%.*}/gspell-${version}.tar.xz"
+depends="enchant,glib,gtk3"
+builddepend="gobject-introspection,vala,gtk-doc"
+group="app.text"
+
+
+setup(){
+    cd $SOURCEDIR
+    ./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib64 \
+		--sysconfdir=/etc \
+		--localstatedir=/var
+
+}
+build(){
+    make
+}
+
+package(){
+    make DESTDIR="$DESTDIR" install
+}
+

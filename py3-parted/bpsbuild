@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="py3-parted"
+version="3.13.0"
+description="Python module for GNU parted"
+source="https://github.com/dcantrell/pyparted/archive/v${version}.tar.gz"
+depends="parted,python"
+builddepend="py3-wheel,py3-installer,py3-build"
+group="dev.python"
+
+setup(){
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+	python3 -m build -wn
+}
+
+package(){
+	cd $SOURCEDIR
+	python3 -m installer --destdir="$DESTDIR" dist/*.whl
+    
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
+

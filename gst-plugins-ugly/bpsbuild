@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="gst-plugins-ugly"
+version="1.22.7"
+description="Ugly GStreamer plugins"
+source="https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-${version}.tar.xz"
+depends="gst-plugins-base"
+group="media.video"
+
+
+setup(){
+   #./autogen.sh 
+   cd $SOURCEDIR
+	meson setup $BUILDDIR --prefix=/usr \
+		--libdir=/usr/lib64
+}
+build(){
+   ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}

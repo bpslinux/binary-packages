@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="dbus-glib"
+version="0.112"
+description="GLib bindings for DBUS"
+source="https://dbus.freedesktop.org/releases/$name/$name-$version.tar.gz"
+depends="dbus,glib"
+group="dev.libs"
+
+
+setup(){
+	cd $SOURCEDIR
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

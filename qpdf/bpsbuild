@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+name="qpdf"
+version="11.6.1"
+description="Command-line tool for structural, content-preserving transformation of PDF files"
+source="https://github.com/qpdf/qpdf/releases/download/v$version/qpdf-$version.tar.gz"
+depends="libjpeg-turbo gnutls"
+group="app.text"
+
+
+setup () {
+	cd $SOURCEDIR
+    cmake -B build -G Ninja \
+    	-DCMAKE_INSTALL_PREFIX=/usr \
+    	-DCMAKE_BUILD_TYPE=MinSizeRel \
+    	-DBUILD_STATIC_LIBS=OFF \
+		-DBUILD_DOC_PDF=OFF \
+		-DBUILD_DOC_HTML=OFF \
+		-DINSTALL_EXAMPLES=OFF
+
+}
+
+build () {
+    #ninja -C build $jobs
+    cmake --build build
+}
+
+package () {
+    #DESTDIR=$DESTDIR ninja -C $BUILDDIR install $jobs
+    DESTDIR=$DESTDIR cmake --install build
+}
+

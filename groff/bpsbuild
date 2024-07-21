@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+name="groff"
+version="1.23.0"
+description="GNU troff text-formatting system"
+source="https://ftp.gnu.org/gnu/groff/groff-${version}.tar.gz"
+depends="perl"
+builddepend="bison,zlib,texinfo,m4"
+group="app.text"
+
+
+setup(){
+    cd $SOURCEDIR
+    ./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib64 \
+		--with-x \
+		--disable-rpath
+
+}
+build(){
+    make
+}
+
+package(){
+    make DESTDIR="$DESTDIR" install
+    
+    rm -rf "$DESTDIR"/usr/lib64/charset.alias
+	rmdir -p "$DESTDIR"/usr/lib64 2>/dev/null || true
+
+	# Prevent conflict with mandoc-doc
+	rm -f "$DESTDIR"/usr/share/man/man1/soelim.1 "$DESTDIR"/usr/share/man/man7/roff.7
+}
+

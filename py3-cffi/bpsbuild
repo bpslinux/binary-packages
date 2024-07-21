@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+name="py3-cffi"
+version="1.16.0"
+description="Foreign Function Interface for Python calling C code."
+depends="python,py3-cparser,libffi"
+group="dev.python"
+source="https://github.com/python-cffi/cffi/archive/refs/tags/v${version}.tar.gz"
+setup()
+{
+cd $SOURCEDIR
+}
+
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+

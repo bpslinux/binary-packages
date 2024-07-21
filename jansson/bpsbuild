@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+name="jansson"
+version="2.14"
+description="lightweight JSON library"
+source="https://github.com/akheron/jansson/releases/download/v${version}/jansson-${version}.tar.gz"
+depends=""
+builddepend=""
+group="sys.devel"
+
+
+setup(){
+    cd $SOURCEDIR
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64 \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--localstatedir=/var
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="glib-networking"
+version="2.78.0"
+description="Network-related giomodules for glib"
+source="https://gitlab.gnome.org/GNOME/glib-networking/-/archive/$version/glib-networking-$version.tar.gz"
+depends="gsettings-desktop-schemas"
+group="net.libs"
+
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/ \
+		-Dlibproxy=disabled \
+		-Dinstalled_tests=false
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}
+

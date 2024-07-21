@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="cheese"
+version="44.1"
+description="Take photos and videos with your webcam"
+source="https://download.gnome.org/sources/cheese/${version%.*}/cheese-$version.tar.xz"
+depends="gsettings-desktop-schemas"
+builddepend="clutter,clutter-gst,clutter-gtk,docbook-xml,docbook-xsl,gdk-pixbuf,gnome-desktop,gobject-introspection,gst-plugins-bad,gstreamer,gtk3,gtk-doc,itstool,libcanberra,libx11,libxslt,meson,vala"
+group="media.video"
+
+
+setup(){
+    cd $SOURCEDIR
+    meson setup $BUILDDIR \
+    	--prefix=/usr \
+        --libdir=/usr/lib64/ \
+        -Db_lto=true \
+        -Dman=false
+}
+build(){
+    meson compile -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+}

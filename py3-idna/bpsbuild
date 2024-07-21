@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="py3-idna"
+version="3.6"
+description="Internationalized Domain Names in Applications"
+source="https://github.com/kjd/idna/archive/v$version.tar.gz"
+depends="python"
+builddepend="py3-installer,py3-build,py3-flit-core"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 -m build --wheel --no-isolation
+}
+
+package(){
+    python3 -m installer --destdir="$DESTDIR" dist/*.whl
+    rm -f "$DESTDIR"/usr/lib/python3*/site-packages/certifi/cacert.pem
+    
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}

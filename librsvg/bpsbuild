@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+name="librsvg"
+version="2.58.1"
+description="Scalable Vector Graphics (SVG) rendering library "
+source="https://gitlab.gnome.org/GNOME/librsvg/-/archive/${version}/librsvg-${version}.tar.gz"
+depends="libthai,gobject-introspection,pango,cairo,fontconfig,libX11,libXext,libXrender,libxcb,gdk-pixbuf"
+builddepend="cargo"
+group="gnome.base"
+
+setup(){
+	#cp -prvf $PACKAGEDIR/Cargo-update.patch /tmp/bps/build/
+    cd $SOURCEDIR
+    #patch -Np1 -i ../Cargo-update.patch
+	
+	autoreconf -fvi
+	# Use LTO
+	export CARGO_PROFILE_RELEASE_LTO=true CARGO_PROFILE_RELEASE_CODEGEN_UNITS=1
+
+	# Use debug
+	export CARGO_PROFILE_RELEASE_DEBUG=2
+
+	
+    ./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib64 \
+		--libexecdir=/usr/lib64/$name \
+		--disable-static \
+		--enable-vala
+	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' libtool
+
+}
+build(){
+	make
+}
+
+package(){
+    make DESTDIR="$DESTDIR" install
+}
+
+
+
+Xsetup(){
+	cp -prvf $PACKAGEDIR/Cargo-update.patch /tmp/bps/build/
+    cd $SOURCEDIR
+    patch -Np1 -i ../Cargo-update.patch
+
+    meson setup $BUILDDIR \
+        --sysconfdir=/etc \
+        --prefix=/usr \
+        --libdir=/usr/lib64 \
+        --libexecdir=/usr/lib64/$name \
+        -Dtests=false \
+        -Dtriplet=false \
+        -Dvala=enabled
+}
+Xbuild(){
+    meson compile -C $BUILDDIR
+}
+
+Xpackage(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+}

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+name="wget"
+version="1.24.5"
+description="Network utility to retrieve files from the Web"
+source="https://ftp.gnu.org/gnu/wget/wget-$version.tar.gz"
+depends="glibc,zlib,gnutls,libidn2,util-linux,libuuid,libpsl,pcre2,nettle"
+builddepend="ca-certificates"
+groups="net.misc"
+setup()
+{
+	cd $SOURCEDIR
+	./configure --prefix=/usr \
+		--libdir=/usr/lib64 \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--with-libidn \
+		--with-ssl=openssl \
+		--disable-nls
+}
+build()
+{
+	make 
+}
+package()
+{
+	make DESTDIR=$DESTDIR install
+	rm -rf "$DESTDIR"/usr/lib
+}
+
+

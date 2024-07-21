@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+name="py3-jinja"
+version="3.1.2"
+source="https://github.com/pallets/jinja/archive/refs/tags/$version.tar.gz"
+description="A very fast and expressive template engine."
+depends="python"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+

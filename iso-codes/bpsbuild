@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="iso-codes"
+version="4.16.0"
+description="Lists of the country, language, and currency names"
+source="https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v${version}/iso-codes-v${version}.tar.gz"
+depends=""
+builddepend="python3"
+group="app.text"
+
+setup(){
+    $SOURCEDIR/configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

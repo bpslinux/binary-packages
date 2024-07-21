@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="doxygen"
+version="1.10.0"
+description="Documentation system for C++, C, Java, IDL and PHP"
+source="https://github.com/doxygen/doxygen/archive/refs/tags/Release_${version//./_}.tar.gz"
+depends=""
+builddepend="cmake,flex,bison"
+group="app.doc"
+
+
+setup () {
+	cd $SOURCEDIR
+	cmake -B $BUILDDIR -G Ninja \
+			-DGIT_EXECUTABLE=/bin/false \
+			-DCMAKE_INSTALL_PREFIX=/usr \
+			-DCMAKE_BUILD_TYPE=MinSizeRel \
+			-Dbuild_xmlparser=ON
+}
+
+build () {
+    cmake --build $BUILDDIR
+}
+
+package () {
+    DESTDIR="$DESTDIR" cmake --install $BUILDDIR
+}
+

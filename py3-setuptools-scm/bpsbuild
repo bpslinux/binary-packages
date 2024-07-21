@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="py3-setuptools-scm"
+version="8.0.4"
+description="Handles managing your python package versions in scm metadata"
+source="https://github.com/pypa/setuptools_scm/archive/refs/tags/v$version.tar.gz"
+depends="python"
+buildepend="" 
+group="dev.python"
+
+setup(){
+cd $SOURCEDIR
+}
+
+build(){
+    python3 -m build --wheel --no-isolation
+}
+
+package(){
+    python3 -m installer --destdir="$DESTDIR" dist/*.whl
+    
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+    mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
+

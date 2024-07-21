@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="qt5-x11extras"
+version="5.15.14"
+description="Provides platform-specific APIs for X11"
+source="https://download.qt.io/official_releases/qt/${version%.*}/${version}/submodules/qtx11extras-everywhere-opensource-src-${version}.tar.xz"
+depends="qt5-base"
+builddepend=""
+group="dev.qt"
+
+setup() {
+	export PATH=/usr/bin/qt5:$PATH
+	cd $SOURCEDIR
+	qmake 
+}
+
+
+build () {
+    make
+}
+
+package () {
+    make INSTALL_ROOT="$DESTDIR" install
+}

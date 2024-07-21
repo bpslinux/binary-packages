@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="py3-multiprocess"
+version="0.70.16"
+source="https://github.com/uqfoundation/multiprocess/archive/refs/tags/$version.tar.gz"
+description="Python bindings for the multiprocess library"
+depends="python"
+builddepend=""
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+    
+  #  mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+#	rm -rf $DESTDIR/usr/lib
+}

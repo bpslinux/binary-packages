@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="libsoup3"
+version="3.4.2"
+description="HTTP client/server library for GNOME"
+source="https://gitlab.gnome.org/GNOME/libsoup/-/archive/$version/libsoup-$version.tar.gz"
+depends="smartypants,glib-networking"
+group="net.libs"
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        -Dsysprof=disabled
+}
+
+build(){
+    ninja -C build
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}
+

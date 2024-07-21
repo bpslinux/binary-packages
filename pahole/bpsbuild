@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+name="pahole"
+version="1.27"
+description="dwarf manipulation utilities"
+source="https://git.kernel.org/pub/scm/devel/pahole/pahole.git/snapshot/pahole-v$version.tar.gz"
+depends=""
+builddepend="cmake,elfutils,python,ninja,py3-matplotlib,zlib"
+group="dev.util"
+
+setup(){
+	cp -prvf $PACKAGEDIR/0001-CMakeLists.txt-Install-ostra.py-into-Python3_SITELIB.patch /tmp/bps/build/
+	cd $SOURCEDIR
+	
+	patch -Np1 -i ../0001-CMakeLists.txt-Install-ostra.py-into-Python3_SITELIB.patch
+
+	 cmake -B $BUILDDIR -G Ninja \
+		-DCMAKE_BUILD_TYPE=none \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=/usr/lib64 \
+	    -D__LIB=lib64 \
+	    -DCMAKE_MODULE_PATH=/usr/lib64/cmake \
+		-DLIBBPF_EMBEDDED=ON
+
+}
+
+build(){
+    cmake --build $BUILDDIR
+}
+
+package(){
+   	DESTDIR=$DESTDIR cmake --install $BUILDDIR
+   	
+   	python -m compileall -d /usr/lib "$DESTDIR/usr/lib64"
+	python -O -m compileall -d /usr/lib "$DESTDIR/usr/lib64"
+
+}

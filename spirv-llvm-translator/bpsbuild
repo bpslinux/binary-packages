@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+name="spirv-llvm-translator"
+version="16.0.0"
+description="Bi-directional translator between SPIR-V and LLVM IR"
+source="https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/v$version/SPIRV-LLVM-Translator-$version.tar.gz"
+depends="spirv-tools,llvm"
+group="dev.util"
+
+
+setup(){
+	cd $SOURCEDIR
+    #mkdir build && cd build
+    cmake -B build -G Ninja \
+        -D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_INSTALL_LIBDIR=lib \
+		-D CMAKE_BUILD_TYPE=Release \
+		-D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-D CMAKE_POSITION_INDEPENDENT_CODE=ON \
+		-D CMAKE_SKIP_RPATH=ON \
+		-D LLVM_BUILD_TOOLS=ON \
+		-D CCACHE_ALLOWED=OFF \
+		-D LLVM_DIR=/usr/lib/cmake/llvm \
+		-D LLVM_SPIRV_BUILD_EXTERNAL=YES \
+		-D LLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=/usr/include/spirv \
+		-D FETCHCONTENT_FULLY_DISCONNECTED=ON \
+		-Wno-dev
+
+
+}
+
+build(){
+    cmake --build build
+}
+
+package(){
+    DESTDIR=$DESTDIR cmake --install build
+    install -Dm755 build/tools/llvm-spirv/llvm-spirv -t "${DESTDIR}"/usr/bin
+}
+

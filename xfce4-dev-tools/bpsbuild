@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+name="xfce4-dev-tools"
+version="4.18.0"
+description="Xfce developer tools"
+source="http://archive.xfce.org/src/xfce/xfce4-dev-tools/${version%.*}/xfce4-dev-tools-${version}.tar.bz2"
+depends="intltool"
+builddepend=""
+group="dev.build"
+
+setup () {
+	cd $SOURCEDIR
+	autoreconf -fvi
+    ./configure --prefix=/usr \
+		--libdir=/usr/lib64/ \
+		--sysconfdir=/etc \
+		--libexecdir=/usr/lib64 \
+		--localstatedir=/var \
+		--disable-static
+}
+
+build(){
+    make
+}
+
+package(){
+    make DESTDIR=$DESTDIR install
+}
+

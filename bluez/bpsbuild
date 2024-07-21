@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+name="bluez"
+version="5.72"
+description="Daemons for the bluetooth protocol stack"
+source="https://www.kernel.org/pub/linux/bluetooth/bluez-${version}.tar.xz"
+depends="dbus"
+builddepend="ell,eudev,json-c,libical,libtool,py3-docutils,py3-pygments,readline"
+group="net.wireless"
+
+
+setup(){
+	cp -prvf $PACKAGEDIR/files/ /tmp/bps/build/
+	cd $SOURCEDIR
+	patch -Np1 -i ../files/bluez-obexd_without_systemd-1.patch
+	
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        --sysconfdir=/etc     \
+        --localstatedir=/var  \
+        --enable-library      \
+        --disable-manpages    \
+        --disable-systemd
+}
+
+build(){
+    make
+}
+
+package (){
+    make install DESTDIR=$DESTDIR
+    install -v -dm755 $DESTDIR/usr/sbin
+    install -v -dm755 $DESTDIR/etc/init.d
+    ln -svf ../libexec/bluetooth/bluetoothd $DESTDIR/usr/sbin/bluetoothd
+    install -v -dm755 $DESTDIR/etc/bluetooth
+    install -v -m644 src/main.conf $DESTDIR/etc/bluetooth/main.conf
+    install -v -dm755 $DESTDIR/usr/share/doc/
+    install -v -dm755 $DESTDIR/usr/share/doc/bluez-5.66
+    install -v -m644 doc/*.txt $DESTDIR/usr/share/doc/bluez-5.66
+    install ../files/bluetooth.initd $DESTDIR/etc/init.d/bluetooth
+}

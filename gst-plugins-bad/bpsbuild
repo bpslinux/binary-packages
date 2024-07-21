@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="gst-plugins-bad"
+version="1.22.7"
+description=" GStreamer plugins and helper libraries"
+source="https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-${version}.tar.xz"
+depends="gst-plugins-base"
+group="media.video"
+
+
+# Fix undefined symbol "exp"
+export CFLAGS="$CfLAGS -lm"
+
+setup(){
+	cd $SOURCEDIR
+	 meson setup $BUILDDIR --prefix=/usr \
+    	--libdir=/usr/lib64 \
+    	-Dgpl=enabled
+}
+build(){
+   ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}

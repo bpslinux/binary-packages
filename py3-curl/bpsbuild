@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+name='py3-curl'
+version="7.45.2"
+source="https://salsa.debian.org/python-team/packages/pycurl/-/archive/upstream/${version}/pycurl-upstream-${version}.tar.gz"
+depends="python,curl"
+group="dev.python"
+setup()
+{
+cd $SOURCEDIR
+}
+
+build(){
+	#export PYCURL_SSL_LIBRARY=openssl
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+
+

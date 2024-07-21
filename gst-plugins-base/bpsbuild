@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="gst-plugins-base"
+version="1.22.7"
+description="GStreamer plugins and helper libraries"
+source="https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-${version}.tar.xz"
+depends="gstreamer"
+group="media.video"
+
+
+setup(){
+	cd $SOURCEDIR
+	 meson setup $BUILDDIR --prefix=/usr \
+    	--libdir=/usr/lib64 \
+    	--wrap-mode=nodownload
+}
+build(){
+   ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}

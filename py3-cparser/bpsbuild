@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+name="py3-cparser"
+version="2.21"
+description="A super-fast templating language that borrows the best ideas from the existing templating languages."
+depends="python"
+group="dev.python"
+source="https://github.com/eliben/pycparser/archive/refs/tags/release_v$version.tar.gz"
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+

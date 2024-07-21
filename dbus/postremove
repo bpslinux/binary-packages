@@ -1,0 +1,3 @@
+sed -i "/messagebus/d" /etc/group
+sed -i "/messagebus/d" /etc/passwd
+

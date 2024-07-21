@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="wireless-tools"
+version="30.pre9"
+description="A collection of tools to configure IEEE 802.11 wireless LAN cards"
+source="https://hewlettpackard.github.io/wireless-tools/wireless_tools.$version.tar.gz"
+depends=""
+builddepend=""
+group="net.wireless"
+
+setup(){
+	cd $SOURCEDIR 
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR \
+        INSTALL_DIR="${DESTDIR}/usr/bin" \
+        INSTALL_LIB="${DESTDIR}/usr/lib64" \
+        INSTALL_INC="${DESTDIR}/usr/include" \
+        INSTALL_MAN="${DESTDIR}/usr/share/man"
+}
+

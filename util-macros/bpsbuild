@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+version="1.20.0"
+name="util-macros"
+description="X.Org autotools utility macros"
+source="https://www.x.org/releases/individual/util/util-macros-${version}.tar.gz"
+depends=""
+builddepend=""
+groups="x11.wm"
+
+#cd $name-$version
+setup()
+{
+	cd $SOURCEDIR
+	./configure --prefix=/usr \
+		--libdir=/usr/lib64/	
+}
+build()
+{
+	make
+}
+package()
+{
+	make install DESTDIR=${DESTDIR}
+}
+
+

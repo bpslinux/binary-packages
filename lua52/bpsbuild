@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+name="lua52"
+version="5.2.4"
+description="Powerful lightweight programming language designed for extending applications"
+source="https://www.lua.org/ftp/lua-${version}.tar.gz"
+depends="readline"
+builddepend=""
+group="dev.lang"
+
+
+setup(){
+	cp -prvf $PACKAGEDIR/files/ /tmp/bps/build/
+	cd $SOURCEDIR
+	patch -p1 -i ../files/liblua.so.patch
+	
+	sed "s/%VER%/${version%.*}/g;s/%REL%/$version/g" ../lua.pc > lua.pc
+  	sed -e 's:llua:llua5.2:' -e 's:/include:/include/lua5.2:' -i lua.pc
+  	sed -r -e '/^LUA_(SO|A|T)=/ s/lua/lua5.2/' -e '/^LUAC_T=/ s/luac/luac5.2/' -i src/Makefile
+
+	
+}
+
+build(){
+	cd $SOURCEDIR
+    make MYCFLAGS="$CFLAGS -fPIC" MYLDFLAGS="$LDFLAGS" linux
+}
+
+package(){
+
+	make \
+    TO_BIN='lua5.2 luac5.2' \
+    TO_LIB="liblua5.2.so liblua5.2.so.5.2 liblua5.2.so.$version" \
+    INSTALL_DATA='cp -d' \
+    INSTALL_TOP="$DESTDIR"/usr \
+    INSTALL_INC="$DESTDIR"/usr/include/lua5.2 \
+    INSTALL_MAN="$DESTDIR"/usr/share/man/man1 \
+    install
+
+	install -Dm644 ../files/lua.pc "$DESTDIR"/usr/lib64/pkgconfig/lua52.pc
+	ln -sf lua52.pc "$DESTDIR"/usr/lib64/pkgconfig/lua5.2.pc
+	ln -sf lua52.pc "$DESTDIR"/usr/lib64/pkgconfig/lua-5.2.pc
+
+	install -d "$DESTDIR"/usr/share/doc/$name
+	install -m644 doc/*.{gif,png,css,html} "$DESTDIR"/usr/share/doc/$name
+
+	ln -s liblua5.2.so "$DESTDIR"/usr/lib64/liblua.so.5.2
+	ln -s liblua5.2.so "$DESTDIR"/usr/lib64/liblua.so.$version
+
+	cd "$DESTDIR"/usr/share/man/man1
+	mv lua.1 lua5.2.1
+	mv luac.1 luac5.2.1
+  
+	
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+
+}
+

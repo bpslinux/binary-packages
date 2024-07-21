@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+name="libgedit-amtk"
+version="5.8.0"
+description="Actions, menus and toolbars kit for GTK applications"
+source="https://github.com/gedit-technology/libgedit-amtk/archive/${version}/libgedit-amtk-${version}.tar.gz"
+depends="glib,gtk3"
+builddepend="gobject-introspection,gtk-doc,meson"
+group="gui.libs"
+
+
+setup(){
+    cd $SOURCEDIR
+    meson setup $BUILDDIR \
+        --prefix=/usr \
+        --libdir=/usr/lib64 \
+        -Db_lto=true \
+		-Dgobject_introspection=true \
+		-Dgtk_doc=true \
+
+}
+build(){
+    meson compile -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+}
+

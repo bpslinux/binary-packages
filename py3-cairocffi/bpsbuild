@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="py3-cairocffi"
+version="1.6.1"
+description="Python CFFI-based binding to Cairo and GDK-PixBuf"
+source="https://github.com/Kozea/cairocffi/archive/refs/tags/v$version.tar.gz"
+depends="python,py3-cffi,cairo,gdk-pixbuf,py3-xcffib"
+builddepend="py3-flit-core,py3-wheel,py3-installer"
+group="dev.python"
+
+setup(){
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+	python3 -m build -nw
+}
+
+package(){
+	cd $SOURCEDIR
+	python3 -m installer --destdir="$DESTDIR" dist/*.whl
+    
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
+

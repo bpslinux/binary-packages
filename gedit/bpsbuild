@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="gedit"
+version="47.0"
+description="gedit is the GNOME text editor"
+source="https://download.gnome.org/sources/gedit/${version%.*}/gedit-${version}.tar.xz"
+depends="bash,cairo,dconf,gdk-pixbuf,gsettings-desktop-schemas,pango,libgedit-gtksourceview,libgedit-tepl,libgedit-amtk,libgedit-gfls,libpeas"
+builddepend="glib,gobject-introspection,gspell,gtk3,gtkdoc,itstool,libx11,libxml2,meson,perl"
+group="app.editors"
+
+
+setup(){
+    cd $SOURCEDIR
+    meson setup $BUILDDIR \
+        --prefix=/usr \
+        --libdir=/usr/lib64
+
+}
+build(){
+    meson compile -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+}
+

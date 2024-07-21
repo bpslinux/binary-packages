@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+name="lumina-pdf"
+version="1.6.0"
+description="Classes for displaying the contents of SVG files"
+source="https://github.com/lumina-desktop/lumina-pdf/archive/refs/tags/v${version}.tar.gz"
+depends="qt5-base"
+builddepend="qmake,poppler"
+group="lumina.base"
+
+
+setup () {
+	export PATH=/usr/bin/qt5:$PATH
+	cd $SOURCEDIR/src-qt5
+	
+	qmake src-qt5.pro CONFIG+=WITH_I18N
+}
+
+build () {
+    make
+}
+
+package () {
+    make INSTALL_ROOT="$DESTDIR" install
+    
+	mv $DESTDIR/usr/local/* $DESTDIR/usr/
+	rm -rf $DESTDIR/usr/local
+}
+
+

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="tcl"
+version="8.6.14"
+description="The Tcl scripting language"
+source="https://downloads.sourceforge.net/sourceforge/tcl/tcl$version-src.tar.gz"
+depends="zlib"
+builddepend=""
+group="dev.libs"
+
+setup(){
+	cd $SOURCEDIR/unix
+    ./configure -prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--with-system-sqlite \
+		--enable-64bit
+}
+build(){
+    make
+}
+
+package(){
+    make INSTALL_ROOT="$DESTDIR" install install-private-headers
+}
+

@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+version="3.6"
+name="libselinux"
+description="lib"
+source="https://github.com/SELinuxProject/selinux/releases/download/3.6/${name}-${version}.tar.gz"
+depends=""
+builddepend=""
+groups="app.arch"
+setup()
+{
+      echo ""
+}
+build()
+{
+	cp -prvf $PACKAGEDIR/lfs64.patch /tmp/bps/build/
+	cd $SOURCEDIR
+	patch -Np1 -i ../lfs64.patch 
+	make FTS_LDLIBS="-lfts"
+}
+package()
+{
+	cd $SOURCEDIR
+	make install DESTDIR=$DESTDIR
+	
+	mkdir -p $DESTDIR/lib64/
+	mkdir -p $DESTDIR/usr/lib64/
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	mv $DESTDIR/lib/* $DESTDIR/lib64/
+	rm -rf $DESTDIR/usr/lib
+	rm -rf $DESTDIR/lib
+}
+
+

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+name="libgedit-gtksourceview"
+version="299.2.1"
+description="Source code editing widget that extends GtkTextView"
+source="https://github.com/gedit-technology/libgedit-gtksourceview/archive/${version}/libgedit-gtksourceview-${version}.tar.gz"
+depends="glib,gtk3,pango"
+builddepend="gobject-introspection,gtk-doc,meson"
+group="gui.libs"
+
+
+setup(){
+    cd $SOURCEDIR
+    meson setup $BUILDDIR \
+        --prefix=/usr \
+        --libdir=/usr/lib64 \
+        -Db_lto=true \
+		-Dgobject_introspection=true \
+		-Dgtk_doc=true
+
+}
+build(){
+    meson compile -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+}
+

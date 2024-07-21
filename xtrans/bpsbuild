@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="xtrans"
+version="1.5.0"
+description="X.Org xtrans library"
+source="https://gitlab.freedesktop.org/xorg/lib/libxtrans/-/archive/xtrans-$version/libxtrans-xtrans-$version.tar.gz"
+#source="https://www.x.org/archive//individual/lib/xtrans-$version.tar.gz"
+depends=""
+builddepend="xmlto,util-macros"
+group="x11.libs"
+
+
+setup(){
+
+    cd $SOURCEDIR
+    autoreconf -fvi
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    make
+}
+
+package(){
+    make DESTDIR=$DESTDIR install
+}
+

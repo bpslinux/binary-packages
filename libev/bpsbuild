@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+name="libev"
+version="4.33"
+description="event dispatch library"
+source="http://dist.schmorp.de/libev/Attic/libev-${version}.tar.gz"
+depends=""
+group="dev.libs"
+
+setup(){
+    cd $SOURCEDIR
+    ./configure \
+		--prefix=/usr
+}
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}

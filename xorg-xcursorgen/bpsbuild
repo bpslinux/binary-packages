@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="xorg-xcursorgen"
+version="1.0.8"
+description="Create an X cursor file from PNG images"
+source="https://xorg.freedesktop.org/archive/individual/app/xcursorgen-${version}.tar.xz"
+depends="libX11,libpng,libXcursor"
+builddepend="util-macros"
+group="x11.apps"
+
+
+setup(){
+	cd $SOURCEDIR
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64 
+}
+
+build(){
+    make
+}
+
+package(){
+    make DESTDIR=$DESTDIR install
+}

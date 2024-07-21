@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="py3-fonttools"
+version="4.51.0"
+description="A library to manipulate font files from Python"
+source="https://github.com/fonttools/fonttools/archive/refs/tags/${version}.tar.gz"
+depends="python3"
+builddepend="py3-setuptools,py3-wheel"
+group="dev.python"
+
+setup(){
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+	python3 -m build -wn
+}
+
+package(){
+	cd $SOURCEDIR
+	python3 -m installer --destdir="$DESTDIR" dist/*.whl
+    
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
+

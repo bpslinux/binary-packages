@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="py3-lxml"
+version="4.9.2"
+source="https://github.com/lxml/lxml/archive/refs/tags/lxml-$version.tar.gz"
+description="Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API."
+depends="python3,libxml2,libxslt,py3-cython"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+
+build(){
+    python3 setup.py build
+    make html
+}
+
+package(){
+	python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+

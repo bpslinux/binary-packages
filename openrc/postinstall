@@ -1,0 +1,6 @@
+#!/bin/bash
+
+    for level in boot default nonetwork shutdown sysinit ; do
+        mkdir -p /etc/runlevels/$level
+    done
+    touch /etc/fstab

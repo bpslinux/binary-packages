@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="py3-sphinxcontrib-serializinghtml"
+version="1.1.10"
+description="Sphinx extension which outputs \'serialized\' HTML files (json and pickle)"
+source="https://github.com/sphinx-doc/sphinxcontrib-serializinghtml/archive/refs/tags/$version.tar.gz"
+depends="python"
+builddepend="py3-build,py3-flit-core,py3-installer"
+group="dev.python"
+
+setup(){
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+	python3 -m build --wheel --skip-dependency-check --no-isolation
+}
+
+package(){
+	cd $SOURCEDIR
+	python3 -m installer --destdir="$DESTDIR" dist/*.whl
+    
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
+

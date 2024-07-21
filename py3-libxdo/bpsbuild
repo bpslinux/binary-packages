@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+name="py3-libxdo"
+version="0.1.2a1"
+source="https://github.com/rshk/python-libxdo/archive/refs/tags/v${version}.tar.gz"
+description="ibxdo is the library behind xdotool, a tool to “fake keyboard/mouse input, window management, and more”."
+epends="python"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+
+

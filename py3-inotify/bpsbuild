@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+name="py3-inotify"
+version="0.9.6"
+source="https://github.com/seb-m/pyinotify/archive/refs/tags/${version}.tar.gz"
+description="Linux filesystem events monitoring"
+depends="python"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+
+

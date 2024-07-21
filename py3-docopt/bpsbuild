@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+name="py3-docopt"
+version="0.6.2"
+description="A Python argument parser"
+source="https://github.com/docopt/docopt/archive/$version.tar.gz"
+depends="python"
+builddepend="py3-setuptools"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 -m build --wheel --no-isolation
+}
+
+package(){
+    python3 -m installer --destdir="$DESTDIR" dist/*.whl
+    rm -f "$DESTDIR"/usr/lib/python3*/site-packages/certifi/cacert.pem
+    
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
+
+Xbuild(){
+    python3 setup.py build
+}
+
+Xpackage(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}

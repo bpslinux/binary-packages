@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+name="valgrind"
+version="3.23.0"
+description="Tool to help find memory-management problems in programs"
+source="https://sourceware.org/pub/valgrind/valgrind-$version.tar.bz2"
+depends="perl,debuginfod"
+builddepend="gdb,sed,linux-headers"
+group="sys.apps"
+
+setup(){
+    cd $SOURCEDIR
+    autoreconf -fvi
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64 \
+        --libexecdir=/usr/lib64 \
+        --sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--localstatedir=/var \
+		--enable-lto=yes \
+		--without-mpicc
+}
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}

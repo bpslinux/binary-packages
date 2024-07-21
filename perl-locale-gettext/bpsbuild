@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="perl-locale-gettext"
+version="1.07"
+description="Perl bindings for POSIX i18n gettext functions"
+source="https://cpan.metacpan.org/authors/id/P/PV/PVANDRY/Locale-gettext-${version}.tar.gz"
+depends="gettext,perl"
+group="dev.perl"
+
+setup(){
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+	PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR DESTDIR="$DESTDIR"
+    find "${DESTDIR}" -name perllocal.pod -delete
+	find "${DESTDIR}" -name .packlist -delete
+}
+

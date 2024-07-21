@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="libgedit-tepl"
+version="6.10.0"
+description="Text editor product line based on GTK"
+source="https://github.com/gedit-technology/libgedit-tepl/archive/${version}/libgedit-tepl-${version}.tar.gz"
+depends="glib,gtk3,libgedit-gtksourceview"
+builddepend="gobject-introspection,gtk-doc,meson,libgedit-amtk,libgedit-gfls,libhandy"
+group="gui.libs"
+
+
+setup(){
+    cd $SOURCEDIR
+    meson setup $BUILDDIR \
+        --prefix=/usr \
+        --libdir=/usr/lib64
+
+}
+build(){
+    meson compile -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+}
+

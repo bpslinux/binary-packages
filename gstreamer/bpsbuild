@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="gstreamer"
+version="1.22.1"
+description="Multimedia graph framework - core"
+source="https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${version}.tar.xz"
+depends="glib,elfutils,libxml2"
+group="media.libs"
+
+
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}

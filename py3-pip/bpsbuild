@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+name="py3-pip"
+version="24.0"
+description="The PyPA recommended tool for installing Python packages"
+source="https://github.com/pypa/pip/archive/refs/tags/${version}.tar.gz"
+depends="py3-setuptools,python3"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+
+build(){
+    python3 -m build --wheel --no-isolation
+}
+
+package(){
+	local _site_packages=$(python3 -c "import site; print(site.getsitepackages()[0])")
+    python3 -m installer --destdir="$DESTDIR" dist/*.whl
+    
+     PYTHONPATH="$DESTDIR/$_site_packages" "$DESTDIR"/usr/bin/pip completion --bash | install -vDm 644 /dev/stdin "$DESTDIR"/usr/share/bash-completion/completions/pip
+  PYTHONPATH="$DESTDIR/$_site_packages" "$DESTDIR"/usr/bin/pip completion --zsh | tail -n+3 | install -vDm 644 /dev/stdin "$DESTDIR"/usr/share/zsh/site-functions/_pip
+  PYTHONPATH="$DESTDIR/$_site_packages" "$DESTDIR"/usr/bin/pip completion --fish | install -vDm 644 /dev/stdin "$DESTDIR"/usr/share/fish/vendor_completions.d/pip.fish
+
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+    mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
+

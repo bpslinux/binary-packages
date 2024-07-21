@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+name="cargo-c"
+version="0.9.32"
+description="cargo subcommand to build and install C-ABI compatibile dynamic and static libraries"
+source="https://github.com/lu-zero/cargo-c/archive/v$version.tar.gz"
+depends=""
+builddepend="cargo,curl,openssl,zlib"
+group="x11.libs"
+
+
+setup(){
+	cd $SOURCEDIR
+	mkdir -p ${name}-${version}
+	wget https://github.com/lu-zero/cargo-c/releases/download/v$version/Cargo.lock
+	mv Cargo.lock ../Cargo.lock
+	ln -sf "../Cargo.lock" "${name}-${version}/Cargo.lock"
+    cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')" --manifest-path="${name}-${version}/Cargo.toml"
+
+}
+
+build(){
+    export CFLAGS+=' -ffat-lto-objects'
+    export RUSTUP_TOOLCHAIN='stable'
+    export CARGO_TARGET_DIR="${name}-${version}/target"
+    cargo build --release --frozen --manifest-path="${name}-${version}/Cargo.toml"
+
+}
+
+package(){
+    find "${name}-${version}/target/release" -maxdepth 1 -type f -executable -exec install -D -m755 -t "${DESTDIR}/usr/bin" {} +
+    install -D -m644 "${name}-${version}/LICENSE" -t "${DESTDIR}/usr/share/licenses/${name}"
+
+}
+

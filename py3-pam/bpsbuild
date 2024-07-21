@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+name="py3-pam"
+version="2.0.2"
+source="https://github.com/FirefighterBlu3/python-pam/archive/refs/tags/v${version}.tar.gz"
+description="A Python interface to the PAM library"
+depends="python,py3-six"
+
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 -m build --wheel --no-isolation
+}
+
+package(){
+	python3 -m installer --destdir="${DESTDIR}" dist/*.whl
+	
+	mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
+
+

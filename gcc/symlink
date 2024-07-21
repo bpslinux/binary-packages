@@ -1,0 +1,7 @@
+cd /usr/lib/linux/uapi/x86
+ln -s asm/ /usr/include/asm
+
+
+
+
+linux-libc-dev-6.7.9

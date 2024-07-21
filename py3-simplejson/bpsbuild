@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="py3-simplejson"
+version="3.19.2"
+description="Simple, fast and extensible JSON decoder/encoder"
+source="https://github.com/simplejson/simplejson/archive/refs/tags/v$version/simplejson-v$version.tar.gz"
+depends="python"
+builddepend="py3-wheel,py3-builder,py3-setuptools,py3-installer"
+group="dev.python"
+
+setup(){
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+	python3 -m build --wheel --no-isolation
+}
+
+package(){
+	cd $SOURCEDIR
+	python3 -m installer --destdir="$DESTDIR" dist/*.whl
+    
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
+

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="py3-alabaster"
+version="0.7.16"
+description="Lightweight, configurable Sphinx theme"
+source="https://github.com/sphinx-doc/alabaster/archive/$version.tar.gz"
+depends="python"
+builddepend="py3-flit-core"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 -m build --wheel --no-isolation
+}
+
+package(){
+    python3 -m installer --destdir="$DESTDIR" dist/*.whl
+    
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}

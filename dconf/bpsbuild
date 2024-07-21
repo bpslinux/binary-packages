@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+name="dconf"
+version="0.40.0"
+description="Simple low-level configuration system"
+source="https://download.gnome.org/sources/dconf/${version%.*}/dconf-${version}.tar.xz"
+depends="dbus,glib"
+builddepend="vala"
+group="gnome.base"
+
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR \
+    	--buildtype=release \
+    	--prefix=/usr \
+        --libdir=/usr/lib64/ \
+        --libexecdir=/usr/lib64/ \
+		-Dbash_completion=true \
+		-Dman=false
+}
+
+build(){
+    ninja -C build
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+    
+    install -Dm644 /dev/null "$DESTDIR/etc/dconf/db/.placeholder"
+    rm -rf $DESTDIR/usr/lib
+}
+

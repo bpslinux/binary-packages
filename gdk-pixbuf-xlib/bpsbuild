@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="gdk-pixbuf-xlib"
+version="2.40.2"
+description="Deprecated Xlib integration for GdkPixbuf"
+source="https://gitlab.gnome.org/Archive/gdk-pixbuf-xlib/-/archive/$version/gdk-pixbuf-xlib-$version.tar.gz"
+depends="libX11,gdk-pixbuf"
+builddepend="meson,gtk-doc"
+group="x11.libs"
+
+
+setup(){
+    cd $SOURCEDIR
+    meson setup $BUILDDIR \
+        --prefix=/usr \
+        --libdir=/usr/lib64 \
+        -Ddefault_library=both
+}
+build(){
+    meson compile -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+}
+

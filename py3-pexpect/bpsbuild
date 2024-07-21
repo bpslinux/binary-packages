@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+name="py3-pexpect"
+version="4.9"
+source="https://github.com/pexpect/pexpect/archive/refs/tags/${version}.tar.gz"
+description="Make Python a better tool for controlling and automating other programs"
+depends="py3-ptyprocess,python3"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+
+}
+

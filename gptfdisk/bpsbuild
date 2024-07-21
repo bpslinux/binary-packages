@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+name="gptfdisk"
+version="1.0.10"
+description="GPT partition table manipulator for Linux"
+source="https://downloads.sourceforge.net/project/gptfdisk/gptfdisk/${version}/gptfdisk-${version}.tar.gz"
+depends=""
+builddepend="ncurses,e2fsprogs,popt,linux-headers"
+group="sys.apps"
+
+setup(){
+	cd $SOURCEDIR
+	sed -i '/^#include /s:ncursesw/::' gptcurses.cc
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+    make CXX="${CXX:-g++}" CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+}
+
+package(){
+    #make install DESTDIR=$DESTDIR
+    mkdir -p "$DESTDIR"/usr/bin "$DESTDIR"/usr/share/man/man8
+	local i; for i in gdisk cgdisk sgdisk fixparts; do
+		install $i "$DESTDIR"/usr/bin/
+		install $i.8 "$DESTDIR"/usr/share/man/man8/
+	done
+	
+	mkdir -p "$DESTDIR"/usr/bin
+	mv "$DESTDIR"/usr/bin/sgdisk "$DESTDIR"/usr/bin/
+}
+

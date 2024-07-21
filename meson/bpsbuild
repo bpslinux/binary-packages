@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="meson"
+version="1.4.0"
+description="High productivity build system"
+source="https://github.com/mesonbuild/meson/releases/download/$version/meson-$version.tar.gz"
+depends="python"
+builddepend="py3-setuptools"
+group="dev.util"
+
+	
+setup(){
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+	python3 -m build --wheel --no-isolation
+}
+
+package(){
+    python3 -m installer --prefix=/usr --destdir="$DESTDIR" dist/*.whl
+    
+
+}
+

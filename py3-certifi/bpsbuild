@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="py3-certifi"
+version="2024.2.2"
+description="Python3 package for providing Mozilla's CA Bundle"
+source="https://files.pythonhosted.org/packages/source/c/certifi/certifi-$version.tar.gz"
+depends="python"
+builddepend="py3-build,py3-installer,py3-setuptools,py3-wheel"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 -m build --wheel --no-isolation
+}
+
+package(){
+    python3 -m installer --destdir="$DESTDIR" dist/*.whl
+    rm -f "$DESTDIR"/usr/lib/python3*/site-packages/certifi/cacert.pem
+    
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}

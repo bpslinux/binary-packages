@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+name="nspr"
+version="4.35"
+description="Netscape Portable Runtime"
+source="https://archive.mozilla.org/pub/nspr/releases/v$version/src/nspr-$version.tar.gz"
+depends=""
+group="dev.libs"
+
+
+setup(){
+	cd $SOURCEDIR/nspr
+    autoreconf -fvi
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        --includedir=/usr/include/nspr \
+        --enable-optimize \
+        --disable-debug \
+        --enable-64bit
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

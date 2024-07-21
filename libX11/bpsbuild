@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+name="libX11"
+version="1.8.9"
+description="X.Org X11 library"
+source="https://gitlab.freedesktop.org/xorg/lib/libx11/-/archive/libX11-$version/libx11-libX11-$version.tar.gz"
+depends="libxcb,xorgproto"
+builddepend="xmlto,util-macros,xtrans"
+group="x11.libs"
+
+
+setup(){
+    export ACLOCAL_PATH="/usr/share/aclocal/:/usr/local/share/aclocal"
+    cd $SOURCEDIR
+    ./autogen.sh
+    
+    #autoreconf -fvi
+    ./configure --prefix=/usr \
+		--disable-xf86bigfont
+}
+
+build(){
+ sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}

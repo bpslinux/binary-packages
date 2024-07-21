@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+name="grub"
+version="2.12"
+description="sistem grub yükleme paketi"
+source="ftp://ftp.gnu.org/gnu/grub/${name}-${version}.tar.gz"
+depends="glibc,readline,ncurses,xz-utils,device-mapper"
+builddepend="rsync,freetype,ttf-dejavu"
+groups="sys.boot"
+
+## "1" to enable IA32-EFI build in Arch x86_64, "0" to disable
+_IA32_EFI_IN_ARCH_X64="1"
+
+## "1" to enable EMU build, "0" to disable
+_GRUB_EMU_BUILD="0"
+
+_EFI_ARCH='x86_64'
+
+_EMU_ARCH='x86_64'
+
+
+setup()
+{
+	cd $SOURCEDIR
+	cp -prvf $PACKAGEDIR/files/ /tmp/bps/build/
+	wget https://ftp.gnu.org/gnu/unifont/unifont-15.1.05/15.1.05.bdf.gz
+	#gzip -d unifont-15.1.05.bdf.gz
+	
+	echo "Patch to enable GRUB_COLOR_* variables in grub-mkconfig..."
+	## Based on http://lists.gnu.org/archive/html/grub-devel/2012-02/msg00021.html
+	patch -Np1 -i "../files//0001-00_header-add-GRUB_COLOR_-variables.patch"
+
+	echo "Patch to detect of Arch Linux initramfs images by grub-mkconfig..."
+	patch -Np1 -i "../files//0002-10_linux-detect-archlinux-initramfs.patch"
+
+	echo "Patch to support dropins for default configuration..."
+	patch -Np1 -i "../files//0003-support-dropins-for-default-configuration.patch"
+
+	echo "Fix DejaVuSans.ttf location so that grub-mkfont can create *.pf2 files for starfield theme..."
+	sed 's|/usr/share/fonts/dejavu|/usr/share/fonts/dejavu /usr/share/fonts/TTF|g' -i "configure.ac"
+
+	echo "Fix mkinitcpio 'rw' FS#36275..."
+	sed 's| ro | rw |g' -i "util/grub.d/10_linux.in"
+
+	echo "Fix OS naming FS#33393..."
+	sed 's|GNU/Linux|Linux|' -i "util/grub.d/10_linux.in"
+
+	echo "Pull in latest language files..."
+	./linguas.sh
+
+	echo "Avoid problem with unifont during compile of grub..."
+	# http://savannah.gnu.org/bugs/?40330 and https://bugs.archlinux.org/task/37847
+	gzip -cd "unifont-15.1.05.bdf.gz" > "unifont.bdf"
+	
+	echo "************************ Run bootstrap ********************************"
+	./bootstrap \
+		--gnulib-srcdir="gnulib/" \
+		--no-git
+
+	echo "****************** Make translations reproducible ***********************"
+	sed -i '1i /^PO-Revision-Date:/ d' po/*.sed
+
+	autoreconf -fvi
+
+
+	echo "****************** Copy the source for building the bios part **************"
+
+	cd $SOURCEDIR
+	
+	echo "*******************Unset all compiler FLAGS for bios build **************"
+	unset CFLAGS
+	unset CPPFLAGS
+	unset CXXFLAGS
+	unset LDFLAGS
+	unset MAKEFLAGS
+	
+	FREETYPE="pkg-config freetype2"
+	BUILD_FREETYPE="pkg-config freetype2"
+
+	./configure \
+		--with-platform="pc" \
+		--target="i386" \
+		--enable-efiemu \
+		--enable-boot-time \
+		--enable-nls \
+		--enable-device-mapper \
+		--enable-cache-stats \
+		--enable-grub-mkfont \
+		--enable-grub-mount \
+		--prefix="/usr" \
+		--libdir=/usr/lib64 \
+		--bindir="/usr/bin" \
+		--sbindir="/usr/bin" \
+		--mandir="/usr/share/man" \
+		--infodir="/usr/share/info" \
+		--datarootdir="/usr/share" \
+		--sysconfdir="/etc" \
+		--program-prefix="" \
+		--with-bootdir="/boot" \
+		--with-grubdir="grub" \
+		--disable-silent-rules \
+		--disable-werror
+}
+
+
+build()
+{
+echo "*********************** Run make for bios build **************************"
+	make
+
+}
+
+
+package()
+{
+	echo "Run make install for bios build..."
+	make DESTDIR="${DESTDIR}/" bashcompletiondir="/usr/share/bash-completion/completions" install
+
+	echo "****************************** Remove gdb debugging related files for bios build ******************************"
+	rm -f "${DESTDIR}/usr/lib/grub/i386-pc"/*.module || true
+	rm -f "${DESTDIR}/usr/lib/grub/i386-pc"/*.image || true
+	rm -f "${DESTDIR}/usr/lib/grub/i386-pc"/{kernel.exec,gdb_grub,gmodule.pl} || true
+
+	echo "*********** Install /etc/default/grub (used by grub-mkconfig) ***********"
+	install -D -m0644 "../files/grub.default" "${DESTDIR}/etc/default/grub"
+
+	mkdir -p ${DESTDIR}"/usr/bin
+	install -m0755 "../files/update-grub" "${DESTDIR}"/usr/bin/update-grub
+
+}
+
+

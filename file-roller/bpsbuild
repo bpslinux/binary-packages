@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+name="file-roller"
+version="43.0"
+description="File Roller is an archive manager for the GNOME desktop"
+source="https://download.gnome.org/sources/file-roller/${version%.*}/file-roller-$version.tar.xz"
+depends=""
+builddepend="desktop-file-utils,itstool,json-glib,libadwaita,libarchive,libportal,meson"
+group="gnome.extra"
+
+
+setup(){
+    cd $SOURCEDIR
+    meson setup $BUILDDIR \
+    	--prefix=/usr \
+        --libdir=/usr/lib64/ \
+        -Db_lto=true \
+        -Dpackagekit=false \
+		-Dcpio=/usr/bin/cpio
+}
+build(){
+    meson compile -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+}

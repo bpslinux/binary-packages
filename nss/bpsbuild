@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+name="nss"
+version="3.94"
+description="Network Security Service libraries"
+source="https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_94_RTM/src/nss-${version}.tar.gz"
+depends="nspr"
+builddepend="py3-six,gyp,py3-multiprocess"
+group="dev.libs"
+
+
+setup(){
+    echo ""
+    
+}
+
+build(){
+	cp -prvf $PACKAGEDIR/nss-${version}-standalone-1.patch /tmp/bps/build/
+	cd $SOURCEDIR
+	patch -Np1 -i ../nss-${version}-standalone-1.patch
+	cd nss
+  ./build.sh \
+    --target x64 \
+    --opt \
+    --enable-libpkix \
+    --system-sqlite \
+    --system-nspr \
+    --disable-tests
+}
+
+package(){
+  local nsprver="$(pkg-config --modversion nspr)"
+  local libdir=/usr/lib
+
+  sed pkg/pkg-config/nss.pc.in \
+    -e "s,%libdir%,$libdir,g" \
+    -e "s,%prefix%,/usr,g" \
+    -e "s,%exec_prefix%,/usr/bin,g" \
+    -e "s,%includedir%,/usr/include/nss,g" \
+    -e "s,%NSPR_VERSION%,$nsprver,g" \
+    -e "s,%NSS_VERSION%,$version,g" |
+    install -Dm644 /dev/stdin "$DESTDIR$libdir/pkgconfig/nss.pc"
+
+  ln -s nss.pc "$DESTDIR$libdir/pkgconfig/mozilla-nss.pc"
+
+  install -Dt "$DESTDIR$libdir" ../dist/Release/lib/*.so
+
+  local vmajor vminor vpatch
+  { read vmajor; read vminor; read vpatch; } \
+    < <(awk "/#define.*NSS_V(MAJOR|MINOR|PATCH)/ {print $3}" lib/nss/nss.h)
+
+  sed pkg/pkg-config/nss-config.in \
+    -e "s,@libdir@,$libdir,g" \
+    -e "s,@prefix@,/usr/bin,g" \
+    -e "s,@exec_prefix@,/usr/bin,g" \
+    -e "s,@includedir@,/usr/include/nss,g" \
+    -e "s,@MOD_MAJOR_VERSION@,$vmajor,g" \
+    -e "s,@MOD_MINOR_VERSION@,$vminor,g" \
+    -e "s,@MOD_PATCH_VERSION@,$vpatch,g" |
+    install -D /dev/stdin "$DESTDIR/usr/bin/nss-config"
+
+  install -Dt "$DESTDIR/usr/bin" \
+    ../dist/Release/bin/{*util,shlibsign,signtool,signver,ssltap}
+
+  install -Dt "$DESTDIR/usr/include/nss" -m644 ../dist/public/nss/*.h
+
+  install -Dt "DESTDIR/usr/share/man/man1" -m644 \
+    doc/nroff/{*util,signtool,signver,ssltap}.1
+
+}
+

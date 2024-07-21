@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="py3-manifest-tool"
+version="2.6.1"
+description="The Device Management allows you to carry out Firmware Over-the-Air (FOTA) updates on managed devices."
+source="https://github.com/PelionIoT/manifest-tool/archive/refs/tags/v${version}.tar.gz"
+depends="python"
+builddepend=""
+group="dev.python"
+
+setup(){
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+

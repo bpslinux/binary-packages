@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+name="py3-cairo"
+version="1.26.0"
+source="https://github.com/pygobject/pycairo/archive/refs/tags/v$version.tar.gz"
+description="Python bindings for the cairo library"
+depends="python,cairo"
+group="dev.python"
+
+setup(){
+    cd $SOURCEDIR
+    meson setup $BUILDDIR \
+        --prefix=/usr \
+        --libdir=/usr/lib64 \
+        -Ddefault_library=both \
+        -Db_lto=true \
+        -Dwheel=true \
+        -Dtests=false
+}
+build(){
+    meson compile -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+    python3 -m compileall "$DESTDIR"/usr/lib64
+	python3 -O -m compileall -d /usr/lib64 "$DESTDIR/usr/lib64"
+	
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+
+}

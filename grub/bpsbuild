@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+name="grub"
+version="2.12"
+description="sistem grub yükleme paketi"
+source="ftp://ftp.gnu.org/gnu/grub/${name}-${version}.tar.gz"
+depends="glibc,readline,ncurses,xz-utils,device-mapper"
+builddepend="rsync,freetype,ttf-dejavu"
+groups="sys.boot"
+
+
+setup(){
+	echo depends bli part_gpt > $SOURCEDIR/grub-core/extra_deps.lst
+	cd $SOURCEDIR
+
+    autoreconf -fvi
+    ./configure --prefix=/usr \
+        --sysconfdir=/etc \
+        --libdir=/usr/lib64/ \
+        --disable-nls \
+        --disable-werror \
+        --disable-grub-themes \
+        --with-platform=efi \
+        --target=x86_64 
+}
+
+build(){
+	make
+
+}
+
+package(){
+    make DESTDIR=$DESTDIR install
+
+    # default grub config
+    mkdir -p $DESTDIR/etc/default $DESTDIR/usr/bin/
+    {
+  	echo 'GRUB_DISTRIBUTOR=""'
+    echo 'GRUB_TERMINAL_OUTPUT=console'
+    echo 'GRUB_CMDLINE_LINUX_DEFAULT="quiet"'
+    echo 'GRUB_CMDLINE_LINUX=""'
+	echo 'GRUB_DEFAULT=0'
+	echo 'GRUB_TIMEOUT=5'
+	echo 'GRUB_DISABLE_SUBMENU=y'
+    echo 'GRUB_DISABLE_OS_PROBER=true'
+	echo 'GRUB_DISABLE_RECOVERY=true'
+    } > $DESTDIR/etc/default/grub
+    echo "#!/bin/sh" > $DESTDIR/usr/bin/update-grub
+    echo "grub-mkconfig -o /boot/grub/grub.cfg" >> $DESTDIR/usr/bin/update-grub
+}
+

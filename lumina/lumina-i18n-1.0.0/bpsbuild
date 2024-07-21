@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="lumina-i18n"
+version="1.0.0"
+description="Classes for displaying the contents of SVG files"
+source="https://github.com/lumina-desktop/lumina-i18n/archive/refs/tags/v${version}-Release.tar.gz"
+depends="lumina-desktop"
+builddepend=""
+group="lumina.base"
+
+
+setup () {
+	cd $SOURCEDIR
+}
+
+build () {
+    mkdir -p $DESTDIR/usr/share/lumina-desktop/i18n
+}
+
+package () {
+	tar xvf dist/lumina-i18n.txz -C $DESTDIR/usr/share/lumina-desktop/i18n
+}
+
+

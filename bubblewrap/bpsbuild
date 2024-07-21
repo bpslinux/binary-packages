@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="bubblewrap"
+version="0.8.0"
+description="Unprivileged sandboxing tool, namespaces-powered chroot-like solution"
+source="https://github.com/containers/bubblewrap/archive/refs/tags/v$version.tar.gz"
+depends="libcap"
+group="sys.apps"
+
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}
+

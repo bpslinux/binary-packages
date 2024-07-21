@@ -1,0 +1,2 @@
+update-initramfs -c -k $version
+grub-mkconfig -o /boot/grub/grub.cfg

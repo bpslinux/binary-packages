@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+version="8.7.1"
+name="curl"
+depends="glibc,acl,openssl"
+description="shell ve network copy"
+source="https://curl.se/download/${name}-${version}.tar.xz"
+groups="net.misc"
+setup()
+{
+	cd $SOURCEDIR
+	./configure --prefix=/usr \
+			--libdir=/usr/lib64 \
+            --disable-static \
+            --with-openssl \
+            --enable-threaded-resolver \
+            --with-ca-path=/etc/ssl/certs	
+
+	
+}
+build()
+{
+	make 
+}
+package()
+{
+	make install DESTDIR=$DESTDIR
+	cd $DESTDIR/usr/lib64
+	for ver in 3 4.0.0 4.1.0 4.2.0 4.3.0 4.4.0 4.5.0 4.6.0 4.7.0; do
+        ln -s libcurl.so.4.8.0 libcurl.so.${ver}
+    done
+}
+
+

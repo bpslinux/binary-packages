@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="manifest-tool"
+version="2.1.6"
+description="tool for inspecting and creating multi-platform container images"
+#source="https://github.com/estesp/manifest-tool/archive/refs/tags/v${version}.tar.gz"
+source="https://github.com/estesp/manifest-tool/releases/download/v${version}/binaries-manifest-tool-${version}.tar.gz"
+depends=""
+builddepend=""
+group="dev.python"
+
+setup(){
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+}
+
+package(){
+	install -Dm755 "manifest-tool-linux-amd64" "$DESTDIR/usr/bin/manifest-tool"
+    
+}
+

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+name="libpeas"
+version="1.36.0"
+description="GObject-based plugin system"
+source="https://download.gnome.org/sources/libpeas/${version%.*}/libpeas-${version}.tar.xz"
+depends="gobject-introspection,gtk3"
+builddepend="gi-docgen,meson,lua,py3-pygobject,py3-setuptools,vala"
+group="gui.libs"
+
+
+setup(){
+    cd $SOURCEDIR
+    meson setup $BUILDDIR \
+        --prefix=/usr \
+        --libdir=/usr/lib64
+        -Db_lto=true \
+		-Dvapi=true \
+		-Ddemos=false
+
+}
+build(){
+    meson compile -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+}
+

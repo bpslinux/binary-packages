@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+name="libiconv"
+version="1.17"
+description="GNU charset conversion library for libc which doesn't implement it"
+source="https://ftp.gnu.org/pub/gnu/libiconv/libiconv-${version}.tar.gz"
+depends="gmp"
+builddepend=""
+group="dev.libs"
+
+setup(){
+	cd $SOURCEDIR
+
+    ./configure --prefix=/usr \
+		--disable-nls \
+		--disable-static \
+		--enable-extra-encodings
+}
+
+build(){
+	sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+	sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+	
+    make
+}
+
+package(){
+    make DESTDIR=$DESTDIR install
+    
+    mv -v "$DESTDIR"/usr/include/{iconv.h,libiconv.h}
+	mv -v "$DESTDIR"/usr/bin/{iconv,libiconv}
+	mv -v "$DESTDIR"/usr/share/man/man1/{,lib}iconv.1
+	mv -v "$DESTDIR"/usr/share/man/man3/{,libiconv_}iconv.3
+	mv -v "$DESTDIR"/usr/share/man/man3/{,libiconv_}iconvctl.3
+	mv -v "$DESTDIR"/usr/share/man/man3/{,libiconv_}iconv_open.3
+	mv -v "$DESTDIR"/usr/share/man/man3/{,libiconv_}iconv_close.3
+	mv -v "$DESTDIR"/usr/share/man/man3/{,libiconv_}iconv_open_into.3
+
+}

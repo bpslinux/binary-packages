@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="gnome-calculator"
+version="41.0"
+description="Calculator for solving mathematical equations"
+source="https://download.gnome.org/sources/gnome-calculator/${version%%.*}/gnome-calculator-$version.tar.xz"
+depends=""
+builddepend="glib,gtksourceview4,gtk3,itstool,libadwaita,libgee,libsoup3,libxml2,meson,mpc1,	mpfr,vala"
+group="gnome.extra"
+
+
+setup(){
+    cd $SOURCEDIR
+    meson setup $BUILDDIR \
+    	--prefix=/usr \
+        --libdir=/usr/lib64/ \
+        -Db_lto=true 
+}
+build(){
+    meson compile -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+}

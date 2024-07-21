@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+name="py3-installer"
+version="0.7.0"
+description="Easily download, build, install, upgrade, and uninstall Python packages"
+source="https://github.com/pypa/installer/archive/refs/tags/$version.tar.gz"
+depends="python,py3-build"
+builddepend=""
+group="dev.python"
+
+
+setup(){
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+	python3 -m build -wn --skip-dependency-check
+}
+
+package(){
+	cd $SOURCEDIR
+	PYTHONPATH=src python3 -m installer --destdir="$DESTDIR" dist/*.whl
+
+	# remove windows entrypoint scripts executables
+	rm "$DESTDIR"/usr/lib/python*/site-packages/installer/_scripts/*.exe
+
+	mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
+

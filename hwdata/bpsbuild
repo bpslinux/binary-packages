@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="hwdata"
+version="0.381"
+description="Hardware identification and configuration data"
+source="https://github.com/vcrhonek/hwdata/archive/refs/tags/v$version.tar.gz"
+depends=""
+builddepend="git"
+group="sys.apps"
+
+setup(){
+    cd $SOURCEDIR
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        --sysconfdir=/etc \
+		--datadir=/usr/share \
+		--disable-blacklist
+}
+
+build(){
+	echo ""
+    #make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

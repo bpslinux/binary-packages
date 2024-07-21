@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="py3-markdown"
+version="3.5.1"
+source="https://github.com/Python-Markdown/markdown/archive/refs/tags/$version.tar.gz"
+description="A Python implementation of John Gruber’s Markdown with Extension support."
+depends="python"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 -m build --wheel
+}
+
+package(){
+	python3 -m installer --destdir="$DESTDIR" dist/*.whl
+	
+	mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
+

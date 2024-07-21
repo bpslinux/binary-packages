@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+name="cmake"
+version="3.28.1"
+url="https://github.com/Kitware/CMake"
+description="A cross-platform open-source make system"
+source="https://github.com/Kitware/CMake/releases/download/v$version/cmake-$version.tar.gz"
+depends=""
+group="dev.util"
+
+
+setup(){
+	cd $SOURCEDIR
+    ./bootstrap --prefix=/usr \
+        --no-system-libs \
+        --no-qt-gui \
+        --parallel=`nproc`
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

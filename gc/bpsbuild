@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+name="gc"
+version="8.2.6"
+description="garbage collector for C and C++"
+source="https://github.com/ivmai/bdwgc/releases/download/v${version}/gc-${version}.tar.gz"
+depends=""
+builddepend="linux-headers"
+group="sys.devel"
+
+
+setup(){
+	cd $SOURCEDIR
+    ./configure --prefix=/usr \
+		--enable-static \
+		--enable-cplusplus
+}
+
+build(){
+	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+    make
+}
+
+package(){
+    make DESTDIR="$DESTDIR" install
+}
+

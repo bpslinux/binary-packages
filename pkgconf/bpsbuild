@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="pkgconf"
+version="2.2.0"
+description="development framework configuration tools"
+source="https://distfiles.ariadne.space/pkgconf/pkgconf-$version.tar.xz"
+depends="glibc"
+builddepend="perl,libunwind"
+group="dev.util"
+setup () {
+   cd  $SOURCEDIR
+	./configure --prefix=/usr \
+        	--libdir=/usr/lib64/
+}
+
+build () {
+    make 
+}
+
+package () {
+    make install DESTDIR=$DESTDIR
+    ln -s pkgconf "$DESTDIR"/usr/bin/pkg-config
+}
+

@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+name="dbus"
+version="1.15.2"
+description="A message bus system, a simple way for applications to talk to each other"
+source="https://dbus.freedesktop.org/releases/dbus/dbus-$version.tar.xz"
+depends="audit,expat,libcap-ng,elogind,libX11,xtrans,libX11,libXext,libFS,libICE,libSM,libXScrnSaver,libXt,libXmu,libXpm,libXaw,libXfixes,libXcomposite,libXrender,libXcursor,libXdamage,libfontenc,libXfont2,libXft,libXi,libXinerama,libXrandr,libXres,libXtst,libXv,libXvMC,libXxf86dga,libXxf86vm,libpciaccess,libxkbfile,libxshmfence,libXpresent"
+builddepend=""
+group="sys.apps"
+
+setup55(){
+	mkdir -p /tmp/bps/build/files
+	cp ${dizin}/${paket}/files/* /tmp/bps/build/files/
+	cd $SOURCEDIR
+	./configure --prefix=/usr                        \
+            --sysconfdir=/etc                    \
+            --localstatedir=/var                 \
+            --runstatedir=/run                   \
+            --disable-doxygen-docs               \
+            --disable-xml-docs                   \
+            --disable-static                     \
+            --with-systemduserunitdir=no         \
+            --with-systemdsystemunitdir=no       \
+            --docdir=/usr/share/doc/dbus-1.14.10  \
+            --with-system-socket=/run/dbus/system_bus_socket
+}
+setup()
+{
+	mkdir -p /tmp/bps/build/files
+	cp ${dizin}/${paket}/files/* /tmp/bps/build/files/
+	cd $SOURCEDIR
+	./configure --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        --sysconfdir=/etc \
+        --localstatedir=/var \
+        --runstatedir=/run \
+        --disable-doxygen-docs \
+        --disable-xml-docs \
+        --disable-static \
+        --disable-systemd \
+        --with-system-pid-file=/run/dbus.pid \
+        --with-x\
+        --with-systemduserunitdir=no \
+        --with-systemdsystemunitdir=no \
+        --docdir=/usr/share/doc/dbus-$version 
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+    mkdir -p "$DESTDIR"/etc/{passwd,group,sysconf,init,conf}.d "$DESTDIR"/etc/X11/xinit/xinitrc.d/
+   # echo "messagebus:x:109:" > "$DESTDIR"/etc/group.d/dbus
+    #echo "messagebus:x:103:109::/nonexistent:/usr/sbin/nologin" > "$DESTDIR"/etc/passwd.d/dbus
+    #install ../files/dbus.sysconf "$DESTDIR"/etc/sysconf.d/dbus
+    install ../files/dbus.initd "$DESTDIR"/etc/init.d/dbus
+    install ../files/dbus.confd "$DESTDIR"/etc/conf.d/dbus
+    install ../files/dbus.xinit "$DESTDIR"/etc/X11/xinit/xinitrc.d/30-dbus-launch.sh
+    
+    chown -v root:messagebus $DESTDIR/usr/libexec/dbus-daemon-launch-helper
+	chmod -v 4750 $DESTDIR/usr/libexec/dbus-daemon-launch-helper
+	cd $DESTDIR
+	ln -sfv var/lib/dbus/machine-id etc
+}
+

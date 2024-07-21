@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+name="cups-filters"
+version="2.0.0"
+description="OpenPrinting CUPS filters and backends"
+source="https://github.com/OpenPrinting/cups-filters/archive/refs/tags/${version}.tar.gz"
+depends="cups,poppler,ghostscript,libppd"
+group="net.print"
+
+
+setup () {
+	CXXFLAGS="$CXXFLAGS -flto=auto -std=c++17" \
+	cd $SOURCEDIR
+	autoreconf -fvi
+    ./configure --prefix=/usr \
+		--libdir=/usr/lib64/ \
+		--disable-avahi \
+		--disable-mutool \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--localstatedir=/var \
+		--with-shell=/bin/sh \
+		--without-rcdir \
+		--without-rclevels \
+		--with-test-font-path=/usr/share/fonts/dejavu/DejaVuSans.ttf
+}
+
+build () {
+    make
+}
+
+package () {
+    make DESTDIR="$DESTDIR" install $jobs
+}
+

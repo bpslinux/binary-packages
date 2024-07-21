@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+name="libxfce4ui"
+version="4.18.6"
+description="Basic utility non-GUI functions for Xfce"
+source="https://archive.xfce.org/src/xfce/libxfce4ui/${version%.*}/libxfce4ui-${version}.tar.bz2"
+depends="libxfce4ui,libSM,libICE"
+builddepend="intltool"
+group="xfce.base"
+
+setup () {
+	cd $SOURCEDIR
+    ./configure --prefix=/usr \
+		--libdir=/usr/lib64/ \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--disable-debug \
+		--with-vendor-info='Basit Linux'
+
+}
+
+build(){
+    make
+}
+
+package(){
+    make DESTDIR=$DESTDIR install
+}
+

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+name="py3-snowballstemmer"
+version="2.2.0"
+description="Snowball stemming library collection for Python3"
+source="https://pypi.python.org/packages/source/s/snowballstemmer/snowballstemmer-${version}.tar.gz"
+depends="python"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}

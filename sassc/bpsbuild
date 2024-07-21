@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+name="sassc"
+version="3.6.2"
+description="Libsass command line driver"
+source="https://github.com/sass/sassc/archive/refs/tags/${version}.tar.gz"
+depends=""
+builddepend="libsass"
+group="dev.lang"
+
+
+setup () {
+	cd $SOURCEDIR
+	autoreconf -fvi
+    ./configure --prefix=/usr \
+		--libdir=/usr/lib64/ \
+		--disable-static
+}
+
+build () {
+    make
+}
+
+package () {
+    make DESTDIR="$DESTDIR" install
+}
+

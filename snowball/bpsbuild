@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+name="snowball"
+version="2.2.0"
+description="String processing language for creating stemming algorithms"
+source="https://github.com/snowballstem/snowball/archive/refs/tags/v$version.tar.gz"
+depends=""
+builddepend="perl"
+group="sys.apps"
+
+
+setup(){
+echo ""
+}
+build(){
+	cd $SOURCEDIR
+    make
+}
+
+package(){
+	mkdir -p /usr/lib64
+    install -d "$DESTDIR"/usr/bin "$DESTDIR"/usr/lib64 "$DESTDIR"/usr/include
+	install snowball stemwords "$DESTDIR"/usr/bin
+	install libstemmer.a "$DESTDIR"/usr/lib64
+	install include/libstemmer.h "$DESTDIR"/usr/include
+	install -Dm644 COPYING "$DESTDIR/usr/share/licenses/$name/LICENSE"
+	
+	install -Dt "$DESTDIR/usr/include" -m644 include/libstemmer.h
+	install -Dm644 libstemmer.so.0 "$DESTDIR/usr/lib64/libstemmer.so.0.0.0"
+	ln -s libstemmer.so.0.0.0 "$DESTDIR/usr/lib64/libstemmer.so.0"
+	ln -s libstemmer.so.0 "$DESTDIR/usr/lib64/libstemmer.so"
+
+}

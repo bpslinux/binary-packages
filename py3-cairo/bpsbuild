@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="py3-cairo"
+version="1.12.0"
+source="https://github.com/pygobject/pycairo/archive/refs/tags/v$version.tar.gz"
+description="Python bindings for the cairo library"
+depends="python,cairo"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+    
+    mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}

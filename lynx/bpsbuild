@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+name="lynx"
+version="2.9.0"
+description="A text browser for the World Wide Web"
+source="https://invisible-island.net/archives/lynx/tarballs/lynx${version}.tar.gz"
+depends="libidn2,ncurses,openssl"
+group="www.client"
+
+
+setup(){
+	cd $SOURCEDIR
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        --sysconfdir=/etc \
+        --with-ssl=/usr \
+        --enable-nls \
+        --enable-ipv6
+}
+
+build(){
+    make
+}
+
+package(){
+    make DESTDIR="$DESTDIR" install
+    sed -i -e "s|^HELPFILE.*$|HELPFILE:file:///usr/share/doc/lynx/lynx_help/lynx_help_main.html|" "${DESTDIR}/etc/lynx.cfg"
+
+    install -d "${DESTDIR}/usr/share/doc/lynx"
+    cp -rf lynx_help "${DESTDIR}/usr/share/doc/lynx"
+}
+

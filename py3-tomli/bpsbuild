@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="py3-tomli"
+version="2.0.1"
+source="https://github.com/hukkin/tomli/archive/refs/tags/${version}.tar.gz"
+description="Lil TOML parser"
+depends="python"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 -m build -wn --skip-dependency-check
+}
+
+package(){
+    python3 -m installer -d "$DESTDIR" dist/*.whl
+    
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+    mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
+

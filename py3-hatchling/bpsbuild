@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="py3-hatchling"
+version="1.21.0"
+source="https://github.com/pypa/hatch/archive/refs/tags/hatchling-v${version}.tar.gz"
+description="Modern, extensible Python build backend"
+depends="python"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 -m build --wheel backend
+}
+
+package(){
+	python3 -m installer --destdir="$DESTDIR" backend/dist/*.whl
+	install -Dm644 README.md "${DESTDIR}/usr/share/doc/${name}/README.md"
+
+	mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+
+}
+
+

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="xorgproto"
+version="2024.1"
+description="X.Org combined protocol headers"
+source="https://www.x.org/releases/individual/proto/xorgproto-${version}.tar.xz"
+depends="util-macros"
+group="x11.base"
+
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --datadir=/usr/lib \
+		-Dlegacy=true
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}

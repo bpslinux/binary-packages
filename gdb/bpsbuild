@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+name="gdb"
+version="14.2"
+description="GNU debugger"
+source="https://ftp.gnu.org/gnu/gdb/gdb-${version}.tar.xz"
+depends="gmp"
+builddepend="texinfo,python3,guile,ncurses,expat,mpfr,linux-headers,gmp,perl,libtool,zlib,readline"
+group="dev.debug"
+
+
+setup(){
+	cd $SOURCEDIR
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/ \
+		--disable-nls \
+		--enable-tui \
+		--without-libzstd \
+		--with-system-readline \
+		--with-python=/usr/bin/python3 \
+		--with-system-gdbinit=/etc/gdb/gdbinit
+
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}

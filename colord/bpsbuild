@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+name="colord"
+version="1.4.7"
+description="System service to accurately color manage input and output devices "
+source="https://github.com/hughsie/colord/archive/refs/tags/$version.tar.gz"
+depends="dbus,dconf,lcms2,libgudev,libgusb,polkit,shared-mime-info,sqlite"
+builddepend="argyllcms,bash-completion,docbook-xsl,git,gobject-introspection,gtk-doc,meson,sane,vala"
+group="x11.misc"
+
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        -Dsystemd=false \
+		-Ddaemon=false \
+		-Dsession_example=false \
+		-Dbash_completion=false \
+		-Dudev_rules=true \
+		-Dbash_completion=false \
+		-Dlibcolordcompat=true \
+		-Dargyllcms_sensor=true \
+		-Dsane=false \
+		-Dintrospection=false \
+		-Dvapi=false \
+		-Dprint_profiles=false \
+		-Dtests=false \
+		-Dinstalled_tests=false \
+		-Dman=false \
+		-Ddaemon_user=colord \
+		-Ddocs=false
+}
+
+build(){
+    meson compile -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+    mkdir -p $DESTDIR/var/lib/colord
+  	addgroup -S colord 2>/dev/null
+adduser -S -D -H -h $DESTDIR/var/lib/colord -s $DESTDIR/sbin/nologin -G colord -g colord colord 2>/dev/null
+    echo 'u colord - "Color management daemon" /var/lib/colord' |
+    install -Dm644 /dev/stdin "$DESTDIR/usr/lib64/sysusers.d/colord.conf"
+	chown -R colord:colord "$DESTDIR"/var/lib/colord
+}
+

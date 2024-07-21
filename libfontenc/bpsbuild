@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="libfontenc"
+version="1.1.8"
+description="X11 font encoding library"
+source="https://www.x.org/releases/individual/lib/libfontenc-$version.tar.xz"
+depends=""
+builddepend="util-macros,xorgproto"
+group="x11.libs"
+
+setup(){
+    cd $SOURCEDIR
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64 \
+        --disable-static \
+        --with-encodingsdir=/usr/share/fonts/encodings
+}
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}

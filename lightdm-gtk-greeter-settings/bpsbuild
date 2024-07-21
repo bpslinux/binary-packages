@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="lightdm-gtk-greeter-settings"
+version="1.2.3"
+description="Settings editor for the LightDM GTK+ Greeter"
+source="https://github.com/Xubuntu/lightdm-gtk-greeter-settings/archive/refs/tags/lightdm-gtk-greeter-settings-${version}.tar.gz"
+depends="gtk3,lightdm,gdk-pixbuf,gtk-update-icon-cache,lightdm-gtk-greeter,pango,py3-pygobject"
+builddepend="py3-distutils-extra"
+group="x11.misc"
+
+setup () {
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+    python setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+

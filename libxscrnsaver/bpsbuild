@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="libxscrnsaver"
+version="1.2.4"
+description="X.Org screen saver extension"
+source="https://www.x.org/releases/individual/lib/libXScrnSaver-$version.tar.xz"
+depends=""
+builddepend="libXext,libX11,util-macros,xorgproto"
+group="x11.libs"
+
+setup(){
+    cd $SOURCEDIR
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64 \
+        --disable-static
+}
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}

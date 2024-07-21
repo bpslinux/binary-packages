@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+name="libwebp"
+version="1.3.0"
+description="WebP library and conversion tools"
+source="https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${version}.tar.gz"
+depends="libpng,libjpeg-turbo,libtiff"
+group="media.libs"
+
+
+setup(){
+	cd $SOURCEDIR
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        --enable-libwebpmux     \
+        --enable-libwebpdemux   \
+        --enable-libwebpdecoder \
+        --enable-libwebpextras  \
+        --enable-swap-16bit-csp
+}
+
+build(){
+    make
+}
+
+package(){
+    make install DESTDIR=$DESTDIR
+}
+

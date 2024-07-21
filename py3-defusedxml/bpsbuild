@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="py3-defusedxml"
+version="0.7.1"
+description="XML bomb protection for Python stdlib modules"
+source="https://github.com/tiran/defusedxml/archive/v$version.tar.gz"
+depends="python,"
+builddepend="py3-wheel,py3-build,py3-installer,py3-setuptools"
+group="dev.python"
+
+setup(){
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+	python3 -m build --wheel --skip-dependency-check --no-isolation
+}
+
+package(){
+	cd $SOURCEDIR
+	python3 -m installer --destdir="$DESTDIR" dist/*.whl
+    
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
+

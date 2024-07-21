@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="gnome-color-manager"
+version="3.36.0"
+vrsn="3_36_0"
+description="GNOME Color Profile Tools"
+source="https://gitlab.gnome.org/GNOME/gnome-color-manager/-/archive/GNOME_COLOR_MANAGER_$vrsn/gnome-color-manager-GNOME_COLOR_MANAGER_$vrsn.tar.gz"
+depends="cairo,colord,gcc-libs,gdk-pixbuf2,glib2,glibc,gtk3,hicolor-icon-theme,lcms2,libcolord,pango"
+builddepend="appstream-glib,docbook-sgml,docbook-utils,git,meson,perl-sgmls,yelp-tools"
+group="gnome.extra"
+
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        -Db_lto=true 
+
+}
+
+build(){
+	meson compile -C $BUILDDIR
+}
+
+package(){
+	DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+}
+

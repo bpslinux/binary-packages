@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+name="xdg-utils"
+version="1.2.1"
+description="Command line tools that assist applications with a variety of desktop integration tasks"
+source="https://gitlab.freedesktop.org/xdg/xdg-utils/-/archive/v$version/xdg-utils-v$version.tar.gz"
+depends="file,xorg-xset,xorg-xprop"
+group="x11.misc"
+
+
+setup(){
+	cd $SOURCEDIR
+	
+    ./configure --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        --sysconfdir=/etc
+}
+
+build(){
+	sed -i -e 's:$(XMLTO):$(XMLTO) --skip-validation:' tests/Makefile
+	sed -i -e 's:$(XMLTO):$(XMLTO) --skip-validation:' scripts/Makefile
+    make
+}
+
+package(){
+    make DESTDIR="$DESTDIR" install
+}
+
+

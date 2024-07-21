@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+name="argyllcms"
+version="3.2.0"
+description="An ICC compatible color management system with support for different colorimeter hardware"
+source="https://www.argyllcms.com/Argyll_V${version}_src.zip"
+depends="libpng,libtiff,libXss,libXinerama,libXxf86vm,libXrandr,openssl"
+builddepend="ftjam,zip,unzip"
+group="sys.apps"
+
+setup(){
+    cd $SOURCEDIR
+    
+     sed -i 's:^TEST=="/lib/udev/usb-db", IMPORT{program}="usb-db %p":IMPORT{builtin}="hwdb --subsystem=usb":' usb/55-Argyll.rules
+
+    # Use LDFLAGS
+    echo "LINKFLAGS += ${LDFLAGS} ;" >> Jamtop
+}
+build(){
+    CCOPTFLAG="$CFLAGS"
+    jam -q -fJambase ${MAKEFLAGS} -sPREFIX=/usr -sDESTDIR="${DESTDIR}" -sREFSUBDIR=/usr/share/argyllcms/ref all
+
+}
+
+package(){
+    jam -q -fJambase ${MAKEFLAGS} -sPREFIX=/usr -sDESTDIR="${DESTDIR}" -sREFSUBDIR=share/argyllcms/ref install
+
+    rm {doc,ref}/afiles
+    install -Dm644 doc/*.* -t "${DESTDIR}"/usr/share/${name}/doc/
+    install -Dm644 doc/ccmxs/*.ccmx -t "${DESTDIR}"/usr/share/${name}/doc/ccmxs/
+
+    install -Dm644 usb/55-Argyll.rules -t "${DESTDIR}"/usr/lib64/udev/rules.d/
+    
+}

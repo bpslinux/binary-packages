@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="directx-headers"
+version="1.611.0"
+description="DirectX headers for using D3D12"
+source="https://github.com/microsoft/DirectX-Headers/archive/refs/tags/v${version}.tar.gz"
+depends=""
+builddepend=""
+group="dev.util"
+
+
+setup(){
+cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+		--libdir=/usr/lib64/ \
+		-Dbuild-test=false
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" ninja -C $BUILDDIR install
+}
+

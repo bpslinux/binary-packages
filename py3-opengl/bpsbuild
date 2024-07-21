@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+name="py3-opengl"
+version="3.1.7"
+description="The cross platform Python binding to OpenGL and related APIs"
+source="https://files.pythonhosted.org/packages/source/P/PyOpenGL/PyOpenGL-$version.tar.gz"
+depends="python,freeglut"
+builddepend="py3-setuptools"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}

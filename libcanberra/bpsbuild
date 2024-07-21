@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+name="libcanberra"
+version="0.30"
+url="https://0pointer.net/lennart/projects/libcanberra/"
+description="A small and lightweight implementation of the XDG Sound Theme Specification"
+source="https://0pointer.de/lennart/projects/libcanberra/libcanberra-${version}.tar.xz"
+depends="libvorbis,alsa-lib,gstreamer,sound-theme-freedesktop"
+builddepend="gtk3,libpulse"
+group="media.libs"
+
+setup(){
+cp -prvf $PACKAGEDIR/files/ /tmp/bps/build/
+cd $SOURCEDIR
+
+patch -Np1 -i ../files/libcanberra-0.30-wayland-1.patch
+patch -Np1 -i ../files/libcanberra-multi-backend.patch 
+patch -Np1 -i ../files/libcanberra-broadway-fix.patch 
+	#autoreconf -fvi
+	
+    ./configure --prefix=/usr \
+		--libdir=/usr/lib64/ \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--with-builtin=dso \
+		--enable-null \
+		--disable-oss \
+		--enable-alsa \
+		--enable-pulse \
+		--disable-oss \
+		--enable-eudev \
+		--disable-static \
+		--with-builtin=dso
+}
+
+build(){
+    make $jobs
+}
+
+package(){
+    make install DESTDIR=$DESTDIR $jobs
+	rm -rf $DESTDIR/lib/systemd
+}
+
+libltdl
+

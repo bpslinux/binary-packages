@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="libhandy"
+version="1.8.2"
+description="Building blocks for modern adaptive GNOME apps"
+source="https://gitlab.gnome.org/GNOME/libhandy/-/archive/$version/libhandy-$version.tar.gz"
+depends="gtk3"
+builddepend=""
+group="gui.libs"
+
+
+setup(){
+	cd $SOURCEDIR
+	meson setup $BUILDDIR --prefix=/usr \
+			--libdir=/usr/lib64/
+}
+
+build(){
+	ninja -C $BUILDDIR
+}
+
+package(){
+	DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+}
+

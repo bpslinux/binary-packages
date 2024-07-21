@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+name="py3-cython"
+version="0.29.34"
+description="A Python to C compiler."
+depends="python3.11,libxml2,libxslt"
+group="dev.python"
+source="https://github.com/cython/cython/archive/refs/tags/$version.tar.gz"
+
+  
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 setup.py build
+}
+
+package(){
+  python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+

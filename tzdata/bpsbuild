@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+name="tzdata"
+version="2024a"
+description="Sources for time zone and daylight saving time data"
+source="https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz"
+depends=""
+builddepend=""
+group="dev.python"
+
+
+_timezones=('africa' 'antarctica' 'asia' 'australasia'
+           'europe' 'northamerica' 'southamerica'
+           'etcetera' 'backward' 'factory')
+
+setup(){
+	cd $SOURCEDIR
+	wget https://www.iana.org/time-zones/repository/releases/tzcode${version}.tar.gz
+	tar -xvf tzcode${version}.tar.gz
+	wget https://dev.alpinelinux.org/archive/posixtz/posixtz-0.5.tar.xz
+	tar -xvf posixtz-0.5.tar.xz
+}
+
+build(){
+	cd $SOURCEDIR
+	sed -i "s:sbin:bin:g" Makefile
+    make LFLAGS="${LDFLAGS} ${LTOFLAGS}"
+	cd "posixtz-0.5"
+	make posixtz
+}
+
+package(){
+	cd $SOURCEDIR
+	make DESTDIR="${DESTDIR}" install
+	
+	mkdir -p $DESTDIR/usr/share/zoneinfo/posix
+	mkdir -p $DESTDIR/usr/share/zoneinfo/right
+	
+	# install tzdata stuff
+	./zic -b fat -d "${DESTDIR}"/usr/share/zoneinfo ${_timezones[@]}
+	./zic -b fat -d "${DESTDIR}"/usr/share/zoneinfo/posix ${_timezones[@]}
+	./zic -b fat -d "${DESTDIR}"/usr/share/zoneinfo/right -L leapseconds ${_timezones[@]}
+	# This creates the posixrules file. We use New York because POSIX requires the daylight savings time rules to be in accordance with US rules.   
+	./zic -b fat -d "${DESTDIR}"/usr/share/zoneinfo -p Europe/Istanbul
+	install -m644 -t "${DESTDIR}"/usr/share/zoneinfo iso3166.tab leap-seconds.list zone1970.tab zone.tab SECURITY # zone.tab is depricated and will go soon
+
+	# cleanup
+	rm "${DESTDIR}/etc/localtime"
+
+	# install license
+	install -Dm644 LICENSE "${DESTDIR}"/usr/share/licenses/${name}/LICENSE
+}
+

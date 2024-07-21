@@ -1,0 +1,3 @@
+echo ""
+rc-update del dbus
+rc-service dbus stop

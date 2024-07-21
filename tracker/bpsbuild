@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+name="tracker"
+version="3.4.2"
+description="A tagging metadata database, search tool and indexer"
+source="https://gitlab.gnome.org/GNOME/tracker/-/archive/${version}/tracker-${version}.tar.gz"
+depends="py3-stemmer,vala,py3-pygobject,asciidoc,libsoup3,dbus,icu"
+group="app.misc"
+
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/ \
+		-Dbash_completion=false \
+		-Dsystemd_user_services=false \
+		-Ddocs=false \
+		-Dman=false \
+		-Dtests=false \
+		-Dsoup="soup3" \
+		-Dunicode_support="auto" \
+		-Doverride_sqlite_version_check=false \
+		-Dtest_utils=false \
+		-Dtests_tap_protocol=false
+}
+
+build(){
+    ninja -C $BUILDDIR
+}
+
+package(){
+
+    DESTDIR=$DESTDIR ninja -C $BUILDDIR install
+    for prog in help export sql endpoint sparql import ; do
+        if [[ -L $DESTDIR/usr/libexec/tracker3/$prog ]] ; then
+            rm -f $DESTDIR/usr/libexec/tracker3/$prog
+            ln -s ../../bin/tracker3 $DESTDIR/usr/libexec/tracker3/$prog
+        fi
+    done
+}
+

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+name="gsettings-desktop-schemas"
+version="46.0"
+description=" Collection of GSettings schemas for GNOME desktop "
+source="https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas/-/archive/$version/gsettings-desktop-schemas-$version.tar.gz"
+depends=""
+group="gnome.base"
+
+setup(){
+cd $SOURCEDIR
+    sed -i -r 's:"(/system):"/org/gnome\1:g' schemas/*.in
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/
+}
+
+build(){
+    ninja -C $BUILDDIR 
+}
+
+package(){
+   DESTDIR=$DESTDIR ninja -C $BUILDDIR  install
+}
+

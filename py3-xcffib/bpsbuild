@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="py3-xcffib"
+version="1.5.0"
+description="Python3 drop in replacement for xpyb, an XCB python binding"
+source="https://github.com/tych0/xcffib/archive/refs/tags/v$version.tar.gz"
+depends="py3-cffi,libxcb"
+builddepend="py3-setuptools,haskell-xcffib"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+	#make xcffib GEN=xcffibgen CABAL=true
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+

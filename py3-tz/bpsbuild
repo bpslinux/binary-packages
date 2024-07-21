@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+name="py3-tz"
+version="2023.3"
+description="Python3 definitions of world timezone"
+source="https://pypi.python.org/packages/source/p/pytz/pytz-${version}.tar.gz"
+depends="python"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+name="gjs"
+version="1.80.2"
+description="Javascript Bindings for GNOME"
+#source="https://download.gnome.org/sources/gjs/${version%.*}/gjs-${version}.tar.xz"
+source="https://gitlab.gnome.org/GNOME/gjs/-/archive/${version}/gjs-${version}.tar.gz"
+depends="cairo,clang,gtk3,libffi"
+builddepend="meson,dbus"
+group="app.crypt"
+
+
+setup(){
+	cd $SOURCEDIR
+    meson setup $BUILDDIR --prefix=/usr \
+        --libdir=/usr/lib64/ \
+        -Db_lto=true \
+        -Dprofiler=disabled \
+		-Dinstalled_tests=false
+}
+
+build(){
+    meson compile -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+}
+

@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+name="py3-stemmer"
+version="2.2.0.1"
+source="https://github.com/snowballstem/pystemmer/archive/refs/tags/v$version.tar.gz"
+description="String processing language for creating stemming algorithms"
+depends="python"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+    
+}
+
+
+dene(){
+    pyver=$(python -c "import sys; print(str( sys.version_info[0]) + str(sys.version_info[1] ))")
+    for ver in 311 310 ; do
+        if [[ ! -e ${DESTDIR}/usr/lib64/python3/Stemmer.cpython-$ver-$(uname -m)-linux-gnu.so ]] ; then
+            ln -s Stemmer.cpython-$pyver-$(uname -m)-linux-gnu.so \
+                ${DESTDIR}/usr/lib64/python3/Stemmer.cpython-$ver-$(uname -m)-linux-gnu.so
+        fi
+    done
+
+}

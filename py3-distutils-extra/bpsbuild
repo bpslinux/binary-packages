@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+name="py3-distutils-extra"
+version="2.39"
+description="Enhancements to the Python build system"
+source=("https://launchpad.net/python-distutils-extra/trunk/$version/+download/python-distutils-extra-$version.tar.gz")
+depends="python"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+

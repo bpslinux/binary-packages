@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="ninja"
+version="1.11.1"
+description="Small build system with a focus on speed"
+source="https://github.com/ninja-build/ninja/archive/refs/tags/v$version.zip"
+depends="gcc"
+builddepend="python"
+group="dev.util"
+
+setup(){
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+    python3 configure.py --bootstrap
+}
+
+package(){
+	install -m755 -D ninja "${DESTDIR}/usr/bin/ninja"
+	install -m644 -D misc/bash-completion "${DESTDIR}/usr/share/bash-completion/completions/ninja"
+	install -m644 -D misc/zsh-completion "${DESTDIR}/usr/share/zsh/site-functions/_ninja"
+}
+

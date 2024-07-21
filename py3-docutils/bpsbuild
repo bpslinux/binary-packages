@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="py3-docutils"
+version="0.20.1"
+description="Documentation Utilities for Python3"
+source="https://files.pythonhosted.org/packages/source/d/docutils/docutils-${version}.tar.gz"
+depends="python"
+group="dev.python"
+
+setup()
+{
+export PYTHONPATH=/usr/lib64/python3.11:/usr/lib/python3.11
+cd $SOURCEDIR
+}
+build(){
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+
+

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="py3-sphinx"
+version="7.2.2"
+description="Python Documentation Generator"
+source="https://github.com/sphinx-doc/sphinx/archive/refs/tags/v${version}.tar.gz"
+depends="python,py3-babel,py3-docutils,py3-imagesize,py3-jinja,py3-packaging,py3-pygments,py3-requests,py3-snowballstemmer"
+builddepend="py3-build,py3-flit,py3-installer"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build(){
+    python3 -m build --wheel --skip-dependency-check --no-isolation
+}
+
+package(){
+    python3 -m installer --destdir="$DESTDIR" dist/*.whl
+    
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}

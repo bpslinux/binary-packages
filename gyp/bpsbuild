@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="gyp"
+version="20220404"
+description="GYP (Generate Your Projects) meta-build system"
+source="https://salsa.debian.org/python-team/packages/gyp/-/archive/debian/0.1+20220404git9ecf45e-2/gyp-debian-0.1+20220404git9ecf45e-2.tar.gz"
+depends="py3-six"
+builddepend=""
+group="dev.util"
+
+setuo(){
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+    python3 setup.py build
+}
+
+package(){
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+}
+

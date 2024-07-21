@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+name="docbook-xsl"
+version="1.79.2"
+description="XML stylesheets for Docbook-xml transformations"
+source="https://github.com/docbook/xslt10-stylesheets/releases/download/release%2F$version/docbook-xsl-$version.tar.gz"
+depends="docbook-xml,libxml2,libxslt"
+builddepend=""
+group="app.text"
+
+
+setup(){
+	cp -prvf $PACKAGEDIR/files/ /tmp/bps/build/
+}
+
+build(){
+	echo ""
+}
+
+package(){
+	cd $SOURCEDIR
+	local _dest dir f
+	_dest="$DESTDIR"/usr/share/xml/docbook/xsl-stylesheets-$version
+
+	install -dm755 "$_dest"
+	install -m644 VERSION VERSION.xsl "$_dest"/
+	ln -s xsl-stylesheets-$version "${_dest%/*}/xsl-stylesheets"
+	ln -s xsl-stylesheets-$version "${_dest%/*}/xsl-stylesheets-current"
+
+	for dir in assembly common eclipse epub epub3 fo highlighting html \
+		htmlhelp javahelp lib manpages params profiling roundtrip \
+		template website xhtml xhtml-1_1 xhtml5; do
+
+		install -dm755 $_dest/$dir
+		for f in $dir/*.xml $dir/*.xsl $dir/*.dtd $dir/*.ent; do
+			[ -e "$f" ] || continue
+			install -m644 $f $_dest/$dir
+		done
+	done
+
+	install -dm755 "$DESTDIR"/etc/xml
+
+	#install -m644 -D COPYING \
+
+    install -dm755 "$DESTDIR"/etc/sysconf.d/
+    install ../files/docbook-xsl.sysconf "$DESTDIR"/etc/sysconf.d/docbook-xsl
+}
+

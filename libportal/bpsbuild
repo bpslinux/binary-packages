@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+name="libportal"
+version="0.7.1"
+description="GIO-style async APIs for most Flatpak portals"
+source="https://github.com/flatpak/libportal/archive/$version.tar.gz"
+depends="cpio"
+builddepend="meson,gtk-doc,gobject-introspection,vala,gtk3"
+group="dev.libs"
+
+
+setup(){
+    cd $SOURCEDIR
+    meson setup $BUILDDIR \
+    	--prefix=/usr \
+        --libdir=/usr/lib64/ \
+        -Dbackend-gtk3=enabled \
+		-Ddocs=false
+}
+build(){
+    meson compile -C $BUILDDIR
+}
+
+package(){
+    DESTDIR="$DESTDIR" meson install -C $BUILDDIR
+}

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+name="py3-cairosvg"
+version="2.7.1"
+description="SVG converter based on Cairo. It can export SVG files to PDF, PostScript and PNG files"
+source="https://github.com/Kozea/CairoSVG/archive/refs/tags/$version.tar.gz"
+depends="python,py3-cairocffi,py3-pillow,py3-defusedxml,py3-cssselect2"
+builddepend="cairo,py3-setuptools,py3-wheel"
+group="dev.python"
+
+setup(){
+	echo ""
+}
+
+build(){
+	cd $SOURCEDIR
+	python -m build --wheel --skip-dependency-check --no-isolation
+}
+
+package(){
+	cd $SOURCEDIR
+	python3 -m installer --destdir="$DESTDIR" dist/*.whl
+    
+    mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
+

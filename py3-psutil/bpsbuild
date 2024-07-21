@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+name="py3-psutil"
+version="5.9.5"
+source=("https://github.com/giampaolo/psutil/archive/refs/tags/release-$version.tar.gz")
+description="Cross-platform lib for process and system monitoring in Python"
+depends="python"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+build () {
+    python3 setup.py build
+}
+
+package () {
+    python3 setup.py install --prefix=/usr --root="${DESTDIR}" --install-lib=/usr/lib64/python3.11/site-packages --optimize=1 --skip-build
+    
+    rm -r "$DESTDIR"/usr/lib/python3*/site-packages/psutil/tests/
+}
+

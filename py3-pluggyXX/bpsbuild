@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+name="py3-pluggy"
+version="1.5.0"
+description="Plugin management and hook calling for Python"
+source="https://github.com/pytest-dev/pluggy/archive/refs/tags/${version}.tar.gz"
+depends="python,py3-pdm-pep517"
+group="dev.python"
+
+setup()
+{
+cd $SOURCEDIR
+}
+
+build(){
+	python3 -m build --wheel --no-isolation
+}
+
+package(){
+	python3 -m installer --destdir="$DESTDIR" dist/*.whl
+	
+	mkdir -p $DESTDIR/usr/lib64/python3.11
+	mv $DESTDIR/usr/lib/* $DESTDIR/usr/lib64/
+	rm -rf $DESTDIR/usr/lib
+}
